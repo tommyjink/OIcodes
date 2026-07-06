@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>斜率优化 DP 终极交互课件</title>
+    
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <style>
+        :root {
+            --bg-color: #f0f2f5;
+            --card-bg: #ffffff;
+            --primary: #1a73e8;
+            --primary-hover: #1557b0;
+            --text-main: #202124;
+            --text-light: #5f6368;
+            --border: #dadce0;
+            --success: #34a853;
+            --danger: #ea4335;
+            --warning: #fbbc04;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.8;
+            margin: 0;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        .header h1 {
+            font-size: 3em;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #1a73e8, #8ab4f8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .header p {
+            font-size: 1.2em;
+            color: var(--text-light);
+        }
+        .card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+            border: 1px solid rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+        }
+        h2 {
+            font-size: 1.8em;
+            border-bottom: 3px solid var(--primary);
+            display: inline-block;
+            padding-bottom: 8px;
+            margin-top: 0;
+        }
+        .math-box {
+            background: #f8f9fa;
+            border-left: 4px solid var(--primary);
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 20px 0;
+            font-size: 1.1em;
+            overflow-x: auto;
+        }
+        .highlight-text {
+            color: var(--primary);
+            font-weight: bold;
+        }
+        
+        /* Interactive Zones */
+        canvas {
+            display: block;
+            margin: 30px auto;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            background-color: #fafbfc;
+            background-image: linear-gradient(#f1f3f4 1px, transparent 1px), linear-gradient(90deg, #f1f3f4 1px, transparent 1px);
+            background-size: 20px 20px;
+            cursor: crosshair;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.02);
+        }
+        .control-panel {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            gap: 15px;
+        }
+        .slider-container {
+            width: 80%;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        input[type=range] {
+            flex-grow: 1;
+            height: 6px;
+            background: #dadce0;
+            border-radius: 3px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+        input[type=range]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+        .info-badge {
+            background: #e8f0fe;
+            color: #174ea6;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-family: monospace;
+            font-size: 1.1em;
+            font-weight: bold;
+            border: 1px solid #d2e3fc;
+        }
+        .queue-display {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+            min-height: 50px;
+        }
+        .queue-item {
+            background: var(--primary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-family: monospace;
+            animation: popIn 0.3s ease-out forwards;
+        }
+        .queue-item.popping {
+            background: var(--danger);
+            animation: popOut 0.3s ease-in forwards;
+        }
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes popOut {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(0); opacity: 0; }
+        }
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background: var(--primary-hover);
+        }
+        .code-block {
+            background: #202124;
+            color: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            font-family: Consolas, Monaco, monospace;
+            overflow-x: auto;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>斜率优化 DP 终极指南</h1>
+        <p>从代数推导到几何直觉，彻底掌握 Convex Hull Trick</p>
+    </div>
+
+    <div class="card">
+        <h2>1. 核心瓶颈与破局：代数变形</h2>
+        <p>斜率优化通常用来解决形如以下的一维动态规划方程：</p>
+        <div class="math-box">
+            $$dp[i] = \min_{j < i} \{ dp[j] + (A_i - B_j)^2 \} + C_i$$
+        </div>
+        <p>如果直接暴力枚举 $j$，时间复杂度是 $O(N^2)$。其中最棘手的部分是展开后的<strong>交叉乘积项</strong> $-2A_iB_j$。由于它同时包含 $i$ 和 $j$，我们无法直接把它提取到 $\min$ 外面。</p>
+        <p><strong>破局之法：将其强行转化为一次函数 $y = kx + b$ 的形式！</strong>我们把只和 $j$ 有关的项看作变量，把和 $i$ 有关的项看作常数。移项后得到：</p>
+        <div class="math-box" style="border-left-color: var(--success); background: #e6f4ea;">
+            $$ \underbrace{dp[j] + B_j^2}_{y} = \underbrace{2A_i}_{k} \cdot \underbrace{B_j}_{x} + \underbrace{dp[i] - A_i^2 - C_i}_{b} $$
+        </div>
+        <ul>
+            <li><strong>纵坐标 $y$</strong>：$dp[j] + B_j^2$（仅与 $j$ 有关，是平面上的定点）</li>
+            <li><strong>横坐标 $x$</strong>：$B_j$（仅与 $j$ 有关，是平面上的定点）</li>
+            <li><strong>斜率 $k$</strong>：$2A_i$（对于当前循环的 $i$ 来说，是一个已知的固定常数）</li>
+            <li><strong>截距 $b$</strong>：包含我们梦寐以求的 $dp[i]$。<strong>要使 $dp[i]$ 最小，就是要使截距 $b$ 最小！</strong></li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h2>2. 几何直觉：用直线去“兜底”</h2>
+        <p>现在，每一个枚举过的 $j$ 都变成了二维平面上的一个点 $(x_j, y_j)$。我们手里有一条斜率为 $k_i$ 的直线，我们要从下往上平移它。</p>
+        <p><strong>互动指南：</strong>拖动下方滑块改变当前状态的斜率 $k_i$，观察直线是如何找到“最小截距”对应的最优状态点的。</p>
+        
+        <canvas id="sweepCanvas" width="800" height="400"></canvas>
+        
+        <div class="control-panel">
+            <div class="slider-container">
+                <span style="font-weight: bold; font-family: monospace;">斜率 k_i = <span id="kValue">0.50</span></span>
+                <input type="range" id="kSlider" min="0" max="2.5" step="0.05" value="0.5">
+            </div>
+            <div class="info-badge" id="sweepInfo">最佳转移点: 计算中...</div>
+        </div>
+        <p style="margin-top: 20px; color: var(--text-light);">
+            💡 <strong>观察结论：</strong>当直线自下而上平移时，碰到的第一个点就是最优转移点。随着斜率 $k$ 变大，最优切点会不断向右移动。
+        </p>
+    </div>
+
+    <div class="card">
+        <h2>3. 核心科技：维护下凸壳 (Convex Hull)</h2>
+        <p>并不是所有的点都有资格成为最优解。图中那些“凹进去”的点，无论直线的斜率是多少，都不可能成为第一个被碰到的点。因此，我们需要用<strong>单调队列</strong>来维护一个“下凸壳”。</p>
+        
+        <p><strong>互动沙盒：</strong>在下方的画布中，<span class="highlight-text">从左到右点击空白处添加新的状态点</span>。亲眼观察单调队列是如何通过判断斜率，将破坏凸性的废点踢出局的！</p>
+        
+        <canvas id="hullCanvas" width="800" height="400" style="cursor: crosshair;"></canvas>
+        
+        <div class="control-panel">
+            <button onclick="resetHull()">清空画布，重新模拟</button>
+            <div style="font-weight: bold; margin-top: 10px;">当前单调队列内部的状态 (只保留有效顶点)：</div>
+            <div class="queue-display" id="queueDisplay">
+                </div>
+        </div>
+        
+        <div class="math-box" style="margin-top: 30px;">
+            <strong>剔除废点的数学判别式：</strong><br>
+            当新点 $C$ 准备入队时，看队尾的两个点 $A$ 和 $B$。<br>
+            如果 $Slope(A, B) \ge Slope(B, C)$，说明 $B$ 点凹进去了，$B$ 是废点，将 $B$ 从队尾弹出（<code>tail--</code>）。
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>4. $O(N)$ 降维打击：C++ 终极模板</h2>
+        <p>结合上面演示的“队首弹掉斜率小的找切点”和“队尾弹掉凹陷点维护凸壳”，我们得到了极其优雅的线性代码。</p>
+        <div class="code-block">
+<pre style="margin: 0;"><code>long long Y(int j) { return dp[j] + B[j] * B[j]; }
+long long X(int j) { return B[j]; }
+// 计算两点之间的斜率 (注意转 double 防精度丢失，或交叉相乘防除零)
+double slope(int i, int j) {
+    if (X(i) == X(j)) return Y(i) > Y(j) ? 1e18 : -1e18;
+    return 1.0 * (Y(j) - Y(i)) / (X(j) - X(i));
+}
+
+int head = 1, tail = 1;
+q[1] = 0; // 初始状态入队
+
+for (int i = 1; i <= n; i++) {
+    // 1. 队首出队：找到第一个斜率 > 当前斜率 k_i 的线段
+    // 因为 k_i 单调递增，所以切点只会向右移
+    while (head < tail && slope(q[head], q[head + 1]) <= 2 * A[i]) {
+        head++;
+    }
+    
+    // 2. 此时队首 q[head] 就是最优转移点
+    int j = q[head];
+    dp[i] = dp[j] + (A[i] - B[j]) * (A[i] - B[j]) + C[i];
+    
+    // 3. 队尾出队：加入新产生的状态 i，维护下凸壳
+    while (head < tail && slope(q[tail - 1], q[tail]) >= slope(q[tail], i)) {
+        tail--;
+    }
+    q[++tail] = i;
+}</code></pre>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ==========================================
+    // Zone 1: 直线平移互动 (Sweep Line Logic)
+    // ==========================================
+    const sweepCanvas = document.getElementById('sweepCanvas');
+    const ctxSweep = sweepCanvas.getContext('2d');
+    const kSlider = document.getElementById('kSlider');
+    const kValueDisplay = document.getElementById('kValue');
+    const sweepInfo = document.getElementById('sweepInfo');
+
+    // 固定的一组点 (包含了凹点)
+    const fixedPoints = [
+        { id: 'p1', x: 100, y: 320 },
+        { id: 'p2', x: 250, y: 240 },
+        { id: 'p3 (凹点)', x: 400, y: 250 }, // 这个点凹进去了
+        { id: 'p4', x: 550, y: 120 },
+        { id: 'p5', x: 700, y: 60 }
+    ];
+
+    function drawSweep() {
+        ctxSweep.clearRect(0, 0, sweepCanvas.width, sweepCanvas.height);
+        let k = -parseFloat(kSlider.value); // Canvas Y轴向下，真实世界Y向上，所以斜率取负
+
+        // 寻找最优切点 (使 b = y - kx 最小)
+        let bestPoint = fixedPoints[0];
+        let minB = bestPoint.y - k * bestPoint.x;
+        
+        for (let i = 1; i < fixedPoints.length; i++) {
+            let b = fixedPoints[i].y - k * fixedPoints[i].x;
+            if (b < minB) {
+                minB = b;
+                bestPoint = fixedPoints[i];
+            }
+        }
+
+        // 画一条贯穿的切线 y = k*x + minB
+        ctxSweep.beginPath();
+        let y_left = k * 0 + minB;
+        let y_right = k * 800 + minB;
+        ctxSweep.moveTo(0, y_left);
+        ctxSweep.lineTo(800, y_right);
+        ctxSweep.strokeStyle = '#1a73e8';
+        ctxSweep.lineWidth = 2;
+        ctxSweep.setLineDash([8, 4]);
+        ctxSweep.stroke();
+        ctxSweep.setLineDash([]);
+
+        // 画下凸壳辅助线
+        ctxSweep.beginPath();
+        ctxSweep.moveTo(fixedPoints[0].x, fixedPoints[0].y);
+        ctxSweep.lineTo(fixedPoints[1].x, fixedPoints[1].y);
+        ctxSweep.lineTo(fixedPoints[3].x, fixedPoints[3].y);
+        ctxSweep.lineTo(fixedPoints[4].x, fixedPoints[4].y);
+        ctxSweep.strokeStyle = 'rgba(52, 168, 83, 0.4)';
+        ctxSweep.lineWidth = 4;
+        ctxSweep.stroke();
+
+        // 画点
+        fixedPoints.forEach(p => {
+            ctxSweep.beginPath();
+            ctxSweep.arc(p.x, p.y, 7, 0, Math.PI * 2);
+            if (p === bestPoint) {
+                ctxSweep.fillStyle = '#ea4335';
+                ctxSweep.fill();
+                ctxSweep.strokeStyle = '#202124';
+                ctxSweep.lineWidth = 2;
+                ctxSweep.stroke();
+                
+                // 画垂线
+                ctxSweep.beginPath();
+                ctxSweep.moveTo(p.x, p.y);
+                ctxSweep.lineTo(p.x, 400);
+                ctxSweep.strokeStyle = 'rgba(234, 67, 53, 0.5)';
+                ctxSweep.stroke();
+            } else if (p.id.includes('凹')) {
+                ctxSweep.fillStyle = '#9aa0a6'; // 废点
+                ctxSweep.fill();
+            } else {
+                ctxSweep.fillStyle = '#202124';
+                ctxSweep.fill();
+            }
+            
+            ctxSweep.fillStyle = '#202124';
+            ctxSweep.font = '14px sans-serif';
+            ctxSweep.fillText(p.id, p.x - 10, p.y - 15);
+        });
+
+        sweepInfo.innerHTML = `当前最优切点: <strong style="color:var(--danger); font-size:1.2em">${bestPoint.id}</strong> (截距最小)`;
+    }
+
+    kSlider.addEventListener('input', () => {
+        kValueDisplay.textContent = parseFloat(kSlider.value).toFixed(2);
+        drawSweep();
+    });
+    drawSweep(); // init
+
+    // ==========================================
+    // Zone 2: 单调队列下凸壳构建器 (Hull Sandbox)
+    // ==========================================
+    const hullCanvas = document.getElementById('hullCanvas');
+    const ctxHull = hullCanvas.getContext('2d');
+    const queueDisplay = document.getElementById('queueDisplay');
+    
+    let dynPoints = []; // 所有的点
+    let hullQueue = []; // 单调队列 (存索引)
+    let pointCounter = 1;
+
+    function getSlope(p1, p2) {
+        if (p1.x === p2.x) return p2.y < p1.y ? Infinity : -Infinity;
+        // Canvas坐标系下，越往下Y越大。为了符合直觉（下凸），这里做反转
+        return -((p2.y - p1.y) / (p2.x - p1.x)); 
+    }
+
+    function renderHullQueue() {
+        queueDisplay.innerHTML = '';
+        if (hullQueue.length === 0) {
+            queueDisplay.innerHTML = '<span style="color:#9aa0a6;">队列为空</span>';
+            return;
+        }
+        hullQueue.forEach((idx) => {
+            const div = document.createElement('div');
+            div.className = 'queue-item';
+            div.innerText = dynPoints[idx].id;
+            queueDisplay.appendChild(div);
+        });
+    }
+
+    async function addPoint(x, y) {
+        const newPoint = { x, y, id: 'P' + pointCounter++ };
+        dynPoints.push(newPoint);
+        const curIdx = dynPoints.length - 1;
+
+        // 维护单调队列动画效果
+        while (hullQueue.length >= 2) {
+            let tail = hullQueue[hullQueue.length - 1];
+            let tail_prev = hullQueue[hullQueue.length - 2];
+            
+            let s1 = getSlope(dynPoints[tail_prev], dynPoints[tail]);
+            let s2 = getSlope(dynPoints[tail], newPoint);
+            
+            if (s1 >= s2) {
+                // 发现凹陷点！播放弹出动画
+                const nodes = queueDisplay.childNodes;
+                if (nodes.length > 0) {
+                    const lastNode = nodes[nodes.length - 1];
+                    lastNode.classList.add('popping');
+                    // 等待动画结束
+                    await new Promise(r => setTimeout(r, 300)); 
+                }
+                hullQueue.pop(); // 踢出队尾
+                drawHullCanvas();
+                renderHullQueue();
+            } else {
+                break;
+            }
+        }
+        
+        hullQueue.push(curIdx);
+        drawHullCanvas();
+        renderHullQueue();
+    }
+
+    function drawHullCanvas() {
+        ctxHull.clearRect(0, 0, hullCanvas.width, hullCanvas.height);
+        
+        // 画出所有的点
+        dynPoints.forEach((p, idx) => {
+            ctxHull.beginPath();
+            ctxHull.arc(p.x, p.y, 6, 0, Math.PI * 2);
+            // 判断是否在队列里
+            if (hullQueue.includes(idx)) {
+                ctxHull.fillStyle = '#1a73e8'; // 有效点
+            } else {
+                ctxHull.fillStyle = '#9aa0a6'; // 被踢掉的废点
+            }
+            ctxHull.fill();
+            
+            ctxHull.fillStyle = '#202124';
+            ctxHull.font = '14px sans-serif';
+            ctxHull.fillText(p.id, p.x - 10, p.y - 15);
+        });
+
+        // 将队列里的点连成下凸壳
+        if (hullQueue.length > 1) {
+            ctxHull.beginPath();
+            ctxHull.moveTo(dynPoints[hullQueue[0]].x, dynPoints[hullQueue[0]].y);
+            for (let i = 1; i < hullQueue.length; i++) {
+                ctxHull.lineTo(dynPoints[hullQueue[i]].x, dynPoints[hullQueue[i]].y);
+            }
+            ctxHull.strokeStyle = '#34a853';
+            ctxHull.lineWidth = 3;
+            ctxHull.stroke();
+        }
+    }
+
+    hullCanvas.addEventListener('mousedown', (e) => {
+        const rect = hullCanvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        // 保证加入的点 x 坐标单调递增，方便演示
+        if (dynPoints.length > 0 && x <= dynPoints[dynPoints.length - 1].x) {
+            alert("为了模拟真实的 DP 状态，请在最后一个点的【右侧】点击添加新点！");
+            return;
+        }
+        addPoint(x, y);
+    });
+
+    function resetHull() {
+        dynPoints = [];
+        hullQueue = [];
+        pointCounter = 1;
+        drawHullCanvas();
+        renderHullQueue();
+        
+        // 自动加两个初始点
+        addPoint(100, 300);
+        setTimeout(() => addPoint(250, 250), 400);
+    }
+    
+    // 初始画板状态
+    resetHull();
+
+</script>
+</body>
+</html>

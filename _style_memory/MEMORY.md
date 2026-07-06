@@ -1,0 +1,2 @@
+- [OI comprehensive coding style](feedback_oi_style_and_partial_solutions.md) — Complete C++ style spec: 4-space indent, all needed opening braces on next line, omit braces for simple one-line bodies, global arrays, no CamelCase, compact spacing, no output separator tricks like `" \n"[i==n]`.
+- [OI pii alias style](feedback_oi_pii_alias.md) — In OI-style C++, define and use `#define pii pair<int,int>`.

@@ -1,0 +1,5 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     "最小费用流最大流模板"
+relocations:     []
+...
