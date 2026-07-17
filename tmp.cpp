@@ -1,54 +1,83 @@
-#define ls(x) tr[(x)].l
-#define rs(x) tr[(x)].r
-const int N=1e5+5;
-struct node {int l,r,key,val,siz;} tr[N];
-int rt,idx,x,y,z;
-il int add(int key) {tr[++idx]={0,0,key,rand(),1};return idx;}
-il void upd(int x) {tr[x].siz=tr[ls(x)].siz+tr[rs(x)].siz+1;}
-void split(int now,int key,int &x,int &y)
+#include<bits/stdc++.h>
+#define int long long
+#define endl "\n"
+using namespace std;
+const int N=4e6+10,INF=1ll<<60;
+int n,m,L,k,x[N],y[N],d[N],a[N],b[N],sum1[N],sum2[N];
+int cnt[N];
+void solve()
 {
-    if(!now) {x=y=0;return;}
-    if(tr[now].key<=key) x=now,split(rs(x),key,rs(x),y),upd(x);
-    else y=now,split(ls(y),key,x,ls(y)),upd(y);
-}
-int merge(int x,int y)
-{
-    if(!x||!y) return x+y;
-    if(tr[x].val<tr[y].val) {rs(x)=merge(rs(x),y),upd(x);return x;}
-    else {ls(y)=merge(x,ls(y)),upd(y);return y;}
-}
-il void ins(int key) {split(rt,key,x,y),rt=merge(merge(x,add(key)),y);}
-il void del(int key)
-{
-    split(rt,key,y,z),split(y,key-1,x,y);
-    y=merge(ls(y),rs(y)),rt=merge(merge(x,y),z);
-}
-il int rnk(int key)
-{
-    split(rt,key-1,x,y); int res=tr[x].siz+1;
-    rt=merge(x,y); return res;
-}
-il int kth(int rk)
-{
-    int now=rt;
-    while(now)
+    int ans=0,base=0;
+    cin>>n>>L>>k;m=n*4+10;
+    for(int i=0;i<=m;i++)x[i]=y[i]=d[i]=a[i]=b[i]=sum1[i]=sum2[i]=cnt[i]=0;
+    for(int i=1;i<=n;i++)
     {
-        int sz=tr[ls(now)].siz+1;
-        if(sz<rk) rk-=sz,now=rs(now);
-        else if(sz==rk) return tr[now].key;
-        else now=ls(now);
+        int l;cin>>l;l++;
+        d[l]++,d[l+L]--;
+        cnt[l]++;
     }
-    assert(false); return 0;
+    for(int i=1;i<=m;i++)
+    {
+        d[i]+=d[i-1];
+        x[i]=(d[i]==k+1)-(d[i]==k);
+        y[i]=(d[i]==k-1)-(d[i]==k);
+        base+=(d[i]==k);
+    }
+    for(int i=0;i<=L-1;i++)
+        a[0]+=x[i],b[0]+=y[i];
+    for(int i=1;i<=m-L+1;i++)
+    {
+        a[i]=a[i-1]+x[i+L-1]-x[i-1];
+        b[i]=b[i-1]+y[i+L-1]-y[i-1];
+    }
+    int now=-INF;
+    for(int i=L+1;i<=m-L+1;i++)
+    {
+        now=max(now,b[i-L]);
+        if(cnt[i])ans=max(ans,now+a[i]);
+    }
+    now=-INF;
+    for(int i=L+1;i<=m-L+1;i++)
+    {
+        if(cnt[i-L])now=max(now,a[i-L]);
+        ans=max(ans,now+b[i]);
+    }
+    for(int i=1;i<=m-L;i++)
+        sum1[i]=sum1[i-1]+y[i]+x[i+L],
+        sum2[i]=sum2[i-1]+x[i]+y[i+L];
+    deque<int> q;
+    for(int i=1;i<=m-L;i++)
+    {
+        int p=i-2;
+        if(p>=0)
+        {
+            while(!q.empty()&&sum1[q.back()]>sum1[p])q.pop_back();
+            q.push_back(p);
+        }
+        while(!q.empty()&&q.front()<i-L)q.pop_front();
+        if(!q.empty()&&cnt[i])
+            ans=max(ans,sum1[i-1]-sum1[q.front()]);
+    }
+    while(!q.empty())q.pop_front();
+    for(int i=1;i<=m-L;i++)
+    {
+        int p=i-1;
+        if(cnt[i])
+        {
+            while(!q.empty()&&sum2[q.back()]>sum2[p])q.pop_back();
+            q.push_back(p);
+        }
+        while(!q.empty()&&q.front()<i-L+1)q.pop_front();
+        if(!q.empty())
+            ans=max(ans,sum2[i]-sum2[q.front()]);
+    }
+    cout<<ans+base<<endl;
 }
-il int pre(int key)
+signed main()
 {
-    split(rt,key-1,x,y); int now=x;
-    while(rs(now)) now=rs(now);
-    rt=merge(x,y); return tr[now].key;
-}
-il int nxt(int key)
-{
-    split(rt,key,x,y); int now=y;
-    while(ls(now)) now=ls(now);
-    rt=merge(x,y); return tr[now].key;
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;cin>>t;
+    while(t--)solve();
+    return 0;
 }
