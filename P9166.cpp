@@ -1,37 +1,30 @@
-
-#include <bits/stdc++.h>
+#include<bits/stdc++.h>
+#define int long long
+#define endl "\n"
 using namespace std;
-typedef long long ll;
-const int N = 1e6 + 10;
-ll n, m, x;
-ll mini = INT_MAX, maxi = 0;
-bool v[N];
-struct Node {
-	ll l, r;
-} a[N];
-bool cmp(Node a, Node b) {
-	if (a.l == b.l) return a.r < b.r;
-	return a.l < b.l;
+const int N=2e5+10;
+int n,m,x,tag[N],t[N];
+vector<int> ans;
+signed main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cin>>n>>m>>x;
+    for(int i=1;i<=m;i++)
+    {
+        int l,r;
+        cin>>l>>r;
+        if(l<x)tag[l]++;
+        if(r>x)tag[r]++;
+        t[l]++,t[r]--;
+        // cout<<l<<","<<r-1<<endl;
+    }
+    for(int i=1;i<=n;i++)t[i]+=t[i-1];
+    // for(int i=1;i<=n;i++)cout<<t[i]<<" ";
+    // cout<<endl;
+    for(int i=x;t[i];i++)if(tag[i+1])ans.push_back(i+1);
+    for(int i=x-1;t[i];i--)if(tag[i])ans.push_back(i);
+    sort(ans.begin(),ans.end());
+    for(int i:ans)cout<<i<<" ";
+    return 0;
 }
-int main() {
-	cin >> m >> n >> x;
-	for (int i = 1; i <= n; i++) {
-		cin >> a[i].l >> a[i].r;
-		if (a[i].l <= x && x <= a[i].r) {
-			mini = min(mini, a[i].l);
-			maxi = max(maxi, a[i].r);
-			v[a[i].l] = v[a[i].r] = 1;
-		}
-	}
-	sort(a + 1, a + 1 + n, cmp);
-	for (int i = 1; i <= n; i++) if (a[i].l >= mini && a[i].l <= maxi) maxi = max(maxi, a[i].r);
-	for (int i = n; i >= 1; i--) if (a[i].r >= mini && a[i].r <= maxi) mini = min(mini, a[i].l);
-	for (int i = 1; i <= n; i++) {
-		if (a[i].l < mini || a[i].r > maxi) continue;
-		if (a[i].r < x) v[a[i].l] = 1;
-		else v[a[i].r] = 1;
-	}
-	for (int i = 1; i <= m; i++) if (v[i] && i != x) cout << i << " ";
-	return 0;
-}
-
