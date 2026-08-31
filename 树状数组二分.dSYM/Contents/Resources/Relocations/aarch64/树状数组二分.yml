@@ -1,5 +1,0 @@
----
-triple:          'arm64-apple-darwin'
-binary-path:     "树状数组二分"
-relocations:     []
-...

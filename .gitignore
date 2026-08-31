@@ -1,0 +1,32 @@
+# macOS
+.DS_Store
+**/.DS_Store
+
+# build artifacts
+*.dSYM/
+__MACOSX/
+
+# Competitive Programming Helper (cph) cache: test binaries & cases
+.cph-ng/
+**/.cph-ng/
+*.bin
+
+# compiled executables (no extension)
+/P15162
+/P4514_v2
+/QOJ5441
+/QOJ6430
+/QOJ8933
+/test
+/x
+/y
+/(Singapore) National Olympiad in Informatics 2022 Final Contest/l
+/(Singapore) National Olympiad in Informatics 2022 Final Contest/x
+
+# scratch output files (not sample test answers)
+*.out
+!**/sample/**/*.out
+!**/samples/**/*.out
+
+# stray duplicated test scratch
+/digit0* 2
