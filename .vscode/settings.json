@@ -82,5 +82,7 @@
         "/Users/chenghanjin/.local/include"
     ],
     "C_Cpp.errorSquiggles": "enabled",
-    "git.ignoreLimitWarning": true
+    "git.ignoreLimitWarning": true,
+    "cph-ng.run.compilationTimeout": 60000,
+    "cph-ng.languages.cppCompiler": "/opt/homebrew/bin/g++-15"
 }

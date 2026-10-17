@@ -40,7 +40,7 @@ signed main()
         {
             id[i].push_back(++tot);
             num[i][j]=tot;
-            if(lst)g[lst].push_back(tot);
+            if(lst)g[lst].push_back(tot),f[tot].push_back(lst);
             lst=tot;
         }
     }
@@ -67,7 +67,8 @@ signed main()
             if(vis2[id[y][mid]]==-1||vis2[id[y][mid]]<t)l=mid+1;
             else r=mid;
         }
-        if(l==tim[y].size())cout<<-1<<endl;
+        if(l==tim[y].size()||vis2[id[y][l]]<t)cout<<-1<<endl;
+        else cout<<tim[y][l]<<endl;
     }
     return 0;
 }
