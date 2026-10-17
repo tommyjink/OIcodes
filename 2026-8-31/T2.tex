@@ -1,0 +1,171 @@
+\documentclass[UTF8]{ctexart}
+\usepackage{amsmath,amssymb}
+\usepackage{geometry}
+\usepackage{booktabs}
+\geometry{a4paper,margin=2.4cm}
+
+\title{序列：期望递推推导}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+设第 $i$ 次操作成功的概率为
+\[
+q_i=\frac{p_i}{100}.
+\]
+再令 $\xi_i$ 为第 $i$ 次操作是否成功的 $0/1$ 随机变量，则
+\[
+\Pr(\xi_i=1)=q_i,
+\qquad
+\Pr(\xi_i=0)=1-q_i.
+\]
+题目中的随机过程可以写成
+\[
+a_i=\xi_i(a_{i-1}+1).
+\]
+
+定义前缀和随机变量
+\[
+S_i=\sum_{j=1}^{i}a_j.
+\]
+要求的答案就是
+\[
+\mathbb E(S_n^2).
+\]
+
+\section*{状态定义}
+
+维护以下五个量：
+\[
+\begin{aligned}
+A_i&=\mathbb E(a_i),\\
+B_i&=\mathbb E(a_i^2),\\
+C_i&=\mathbb E(S_i),\\
+D_i&=\mathbb E(S_i a_i),\\
+F_i&=\mathbb E(S_i^2).
+\end{aligned}
+\]
+
+初始时 $a_0=S_0=0$，因此
+\[
+A_0=B_0=C_0=D_0=F_0=0.
+\]
+
+\section*{递推}
+
+由于 $\xi_i$ 与前 $i-1$ 步产生的所有随机变量独立，并且
+$\xi_i^2=\xi_i$，所以
+\[
+\begin{aligned}
+A_i
+&=\mathbb E\bigl(\xi_i(a_{i-1}+1)\bigr)\\
+&=q_i\bigl(\mathbb E(a_{i-1})+1\bigr)\\
+&=q_i(A_{i-1}+1).
+\end{aligned}
+\]
+
+同理，
+\[
+\begin{aligned}
+B_i
+&=\mathbb E\bigl(\xi_i^2(a_{i-1}+1)^2\bigr)\\
+&=q_i\mathbb E\bigl(a_{i-1}^2+2a_{i-1}+1\bigr)\\
+&=q_i(B_{i-1}+2A_{i-1}+1).
+\end{aligned}
+\]
+
+为了计算 $S_i^2$ 中的交叉项，先计算
+\[
+H_i=\mathbb E(S_{i-1}a_i).
+\]
+有
+\[
+\begin{aligned}
+H_i
+&=\mathbb E\bigl(S_{i-1}\xi_i(a_{i-1}+1)\bigr)\\
+&=q_i\mathbb E\bigl(S_{i-1}a_{i-1}+S_{i-1}\bigr)\\
+&=q_i(D_{i-1}+C_{i-1}).
+\end{aligned}
+\]
+
+因为
+\[
+S_i=S_{i-1}+a_i,
+\]
+所以
+\[
+C_i=C_{i-1}+A_i.
+\]
+
+再计算联合期望：
+\[
+\begin{aligned}
+D_i
+&=\mathbb E(S_i a_i)\\
+&=\mathbb E\bigl((S_{i-1}+a_i)a_i\bigr)\\
+&=\mathbb E(S_{i-1}a_i)+\mathbb E(a_i^2)\\
+&=H_i+B_i.
+\end{aligned}
+\]
+
+最后展开平方：
+\[
+\begin{aligned}
+F_i
+&=\mathbb E(S_i^2)\\
+&=\mathbb E\bigl((S_{i-1}+a_i)^2\bigr)\\
+&=\mathbb E(S_{i-1}^2)
+  +2\mathbb E(S_{i-1}a_i)
+  +\mathbb E(a_i^2)\\
+&=F_{i-1}+2H_i+B_i.
+\end{aligned}
+\]
+
+因此完整递推为
+\[
+\boxed{
+\begin{aligned}
+H_i&=q_i(D_{i-1}+C_{i-1}),\\
+A_i&=q_i(A_{i-1}+1),\\
+B_i&=q_i(B_{i-1}+2A_{i-1}+1),\\
+F_i&=F_{i-1}+2H_i+B_i,\\
+C_i&=C_{i-1}+A_i,\\
+D_i&=H_i+B_i.
+\end{aligned}}
+\]
+
+\section*{与代码变量的对应}
+
+\begin{center}
+\begin{tabular}{cc}
+\toprule
+代码变量 & 数学含义\\
+\midrule
+\texttt{p[i]} & $q_i$\\
+\texttt{E[i]} & $A_i=\mathbb E(a_i)$\\
+\texttt{E2[i]} & $B_i=\mathbb E(a_i^2)$\\
+\texttt{sum} & $C_i=\mathbb E(S_i)$\\
+\texttt{g} & $D_i=\mathbb E(S_i a_i)$\\
+\texttt{x} & $H_i=\mathbb E(S_{i-1}a_i)$\\
+\texttt{ans} & $F_i=\mathbb E(S_i^2)$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+所有递推均在模 $998244353$ 意义下进行。代码用
+\[
+100^{-1}\pmod {998244353}
+\]
+把输入的百分数转换为 $q_i$。
+
+最终输出
+\[
+F_n=\mathbb E\left(\left(\sum_{i=1}^{n}a_i\right)^2\right).
+\]
+
+时间复杂度为 $O(n)$。
+
+\end{document}

@@ -1,0 +1,667 @@
+{
+  "title": "NOIP 风格模拟赛（二）",
+  "seed": 260926,
+  "points_each": 5,
+  "tasks": {
+    "circle": {
+      "tests": [
+        {
+          "id": 1,
+          "input": "circle/circle01.in",
+          "answer": "circle/circle01.ans",
+          "points": 5,
+          "origin": "自制",
+          "sha256": "9eea28ebb7eaa29de68201aa9c7c96777cb9633b3f6affc02289f56825600ecb"
+        },
+        {
+          "id": 2,
+          "input": "circle/circle02.in",
+          "answer": "circle/circle02.ans",
+          "points": 5,
+          "origin": "自制",
+          "sha256": "7b97bf6047c83cfb567e3e286348bd95c8956bbcfd65c93cf594d5d0769c9c77"
+        },
+        {
+          "id": 3,
+          "input": "circle/circle03.in",
+          "answer": "circle/circle03.ans",
+          "points": 5,
+          "origin": "自制",
+          "sha256": "ab58f301db7c65a1707a5ee69fb2087fd984c5c37bc0d197345ebc56e687eeee"
+        },
+        {
+          "id": 4,
+          "input": "circle/circle04.in",
+          "answer": "circle/circle04.ans",
+          "points": 5,
+          "origin": "自制",
+          "sha256": "7e33514117ee986afe6d98107c17cb1eafbb303bf1efe451fc6e7de2014d7739"
+        },
+        {
+          "id": 5,
+          "input": "circle/circle05.in",
+          "answer": "circle/circle05.ans",
+          "points": 5,
+          "origin": "自制",
+          "sha256": "635da3543a76f19a5bf1fb5bf68368da46d351997952da91a2ff20e471fa391e"
+        },
+        {
+          "id": 6,
+          "input": "circle/circle06.in",
+          "answer": "circle/circle06.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 2",
+          "sha256": "7946a5001ef1b2807fc32952bd6df832cb121fb398c5151cb636c12d03f347fb"
+        },
+        {
+          "id": 7,
+          "input": "circle/circle07.in",
+          "answer": "circle/circle07.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 3",
+          "sha256": "afb3067fc32e87f9ada4f0c6dd6234164bfe784ee96443c8ed1b0943b243b4e6"
+        },
+        {
+          "id": 8,
+          "input": "circle/circle08.in",
+          "answer": "circle/circle08.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 4",
+          "sha256": "18d0c8e060bdfe3bef6866ce9ca92d20c8d1a573a010882bdd9bfefa8957c3ba"
+        },
+        {
+          "id": 9,
+          "input": "circle/circle09.in",
+          "answer": "circle/circle09.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 5",
+          "sha256": "7afa1440958ec829ca588a65d7011ebd080607806df8625d30482857b319d8bd"
+        },
+        {
+          "id": 10,
+          "input": "circle/circle10.in",
+          "answer": "circle/circle10.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 6",
+          "sha256": "2195d5fdb1bb452a671f900c4f191e43431dcacb60ab4db8040ce5297d57e305"
+        },
+        {
+          "id": 11,
+          "input": "circle/circle11.in",
+          "answer": "circle/circle11.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 7",
+          "sha256": "40dfeb367bdab402ab1efdb6ec941427887b3301624fa8ee506c9f6528734995"
+        },
+        {
+          "id": 12,
+          "input": "circle/circle12.in",
+          "answer": "circle/circle12.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 8",
+          "sha256": "221121ccab49d9247ba1f8b394f22ae78641ffc8fba359acacfe7f05779bb3cc"
+        },
+        {
+          "id": 13,
+          "input": "circle/circle13.in",
+          "answer": "circle/circle13.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 9",
+          "sha256": "b55509c19f15babc7daac7b8d1c4cfa08755c8e0f2a12158a20e4f85aa8acc70"
+        },
+        {
+          "id": 14,
+          "input": "circle/circle14.in",
+          "answer": "circle/circle14.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 10",
+          "sha256": "09cf1bb9445599ba35723b21f6873f98f5a033efd16b8449aa64a995057840d9"
+        },
+        {
+          "id": 15,
+          "input": "circle/circle15.in",
+          "answer": "circle/circle15.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 11",
+          "sha256": "72e2d83005e92d626af34de1e65e40fb36b94b786b1e719741b51e8e4110b84d"
+        },
+        {
+          "id": 16,
+          "input": "circle/circle16.in",
+          "answer": "circle/circle16.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 12",
+          "sha256": "96d15582c512c35110981325039f12d85a2c07293b27a393c06deb9d9b28018e"
+        },
+        {
+          "id": 17,
+          "input": "circle/circle17.in",
+          "answer": "circle/circle17.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 13",
+          "sha256": "765b3d88aed153309c5b1cf77a8c39a475287201ccd76ef6e9cbb459864b82b8"
+        },
+        {
+          "id": 18,
+          "input": "circle/circle18.in",
+          "answer": "circle/circle18.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 14",
+          "sha256": "9bf758a5126775223caa34db7cff7caf9aed710cf3510dbb3dc06a4cb09185db"
+        },
+        {
+          "id": 19,
+          "input": "circle/circle19.in",
+          "answer": "circle/circle19.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 15",
+          "sha256": "1a9cf0c5799592485da1d6033bbb6ce5e12e0965a802679e1ba5970326f1b1ac"
+        },
+        {
+          "id": 20,
+          "input": "circle/circle20.in",
+          "answer": "circle/circle20.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 16",
+          "sha256": "5b0cedd3b22fea42025bf25c29f82214178de4ccea6e4b4ff6a271a770761c54"
+        }
+      ],
+      "source": "t1.zip"
+    },
+    "jobs": {
+      "tests": [
+        {
+          "id": 1,
+          "input": "jobs/jobs01.in",
+          "answer": "jobs/jobs01.ans",
+          "points": 5,
+          "origin": "自制",
+          "sha256": "99a828ea1245bb2f5fe5739f9fe11256aa4a8788183b28735648743b264e9900"
+        },
+        {
+          "id": 2,
+          "input": "jobs/jobs02.in",
+          "answer": "jobs/jobs02.ans",
+          "points": 5,
+          "origin": "自制",
+          "sha256": "54da4571019ad9f00cbd365466c82d8e6c421919bfa576c0a84dd51631ff68e9"
+        },
+        {
+          "id": 3,
+          "input": "jobs/jobs03.in",
+          "answer": "jobs/jobs03.ans",
+          "points": 5,
+          "origin": "自制",
+          "sha256": "ae41262ae406f3a0e66870cd58602b6ad58511db19934679895bea1711477ba0"
+        },
+        {
+          "id": 4,
+          "input": "jobs/jobs04.in",
+          "answer": "jobs/jobs04.ans",
+          "points": 5,
+          "origin": "自制",
+          "sha256": "11b20923d8f9d7710ae963c679d6dc06635edbf69e92d067242521dad4f9f897"
+        },
+        {
+          "id": 5,
+          "input": "jobs/jobs05.in",
+          "answer": "jobs/jobs05.ans",
+          "points": 5,
+          "origin": "自制",
+          "sha256": "bc829ff61ec1749a679be4470f41a3ccdd4d88053a8055c71de55c9fa5574c2f"
+        },
+        {
+          "id": 6,
+          "input": "jobs/jobs06.in",
+          "answer": "jobs/jobs06.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 2",
+          "sha256": "de1d460360be3469308f3f0ffed25d4016c6760ea2d39a84044e567ebd12d95f"
+        },
+        {
+          "id": 7,
+          "input": "jobs/jobs07.in",
+          "answer": "jobs/jobs07.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 3",
+          "sha256": "5313fe25313537ec52796a8177a2b0ef36f546c61d022dd41f6550e08b4e946e"
+        },
+        {
+          "id": 8,
+          "input": "jobs/jobs08.in",
+          "answer": "jobs/jobs08.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 4",
+          "sha256": "de39a538c5c25a90421a47d0427f93e2c920816a07658a064e69fbdcdd893989"
+        },
+        {
+          "id": 9,
+          "input": "jobs/jobs09.in",
+          "answer": "jobs/jobs09.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 5",
+          "sha256": "2c86d593ac29993af1b7362527fe5891a1f7f7820e5d120e21db4b0105ad4e6c"
+        },
+        {
+          "id": 10,
+          "input": "jobs/jobs10.in",
+          "answer": "jobs/jobs10.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 6",
+          "sha256": "cf2959a6dc5c9e58082565d9c68e48ca654e052fbf80be4da3fe5e879d7d3695"
+        },
+        {
+          "id": 11,
+          "input": "jobs/jobs11.in",
+          "answer": "jobs/jobs11.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 7",
+          "sha256": "1951aaa3fb050eae94f49e12b3da696a365efedf016be9a3ce9440640e4013f6"
+        },
+        {
+          "id": 12,
+          "input": "jobs/jobs12.in",
+          "answer": "jobs/jobs12.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 8",
+          "sha256": "445c364bdc6bdedfce92a96a97a175d39cae27e3566d26e89e11c43c7b8b8342"
+        },
+        {
+          "id": 13,
+          "input": "jobs/jobs13.in",
+          "answer": "jobs/jobs13.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 9",
+          "sha256": "1df4c4d5ba5a1672d9150fed29a8cb7548c8628243c7ecddc15c67d83aabcee1"
+        },
+        {
+          "id": 14,
+          "input": "jobs/jobs14.in",
+          "answer": "jobs/jobs14.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 10",
+          "sha256": "c80612425d2d0974330a8217818652961dbc36428df183854315b894a54fe0cc"
+        },
+        {
+          "id": 15,
+          "input": "jobs/jobs15.in",
+          "answer": "jobs/jobs15.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 11",
+          "sha256": "093f25d4dda733b238c09a96e30208e472da7878446b26310f61623095d505e7"
+        },
+        {
+          "id": 16,
+          "input": "jobs/jobs16.in",
+          "answer": "jobs/jobs16.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 12",
+          "sha256": "1781d7d649bb04820c8983767a247ec03ad39418eb302f60f591845dc0026223"
+        },
+        {
+          "id": 17,
+          "input": "jobs/jobs17.in",
+          "answer": "jobs/jobs17.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 13",
+          "sha256": "34b6981be654d66bfebb3e24d4b5bacbeb07567fed1682b6d8c04bf64f040d8b"
+        },
+        {
+          "id": 18,
+          "input": "jobs/jobs18.in",
+          "answer": "jobs/jobs18.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 14",
+          "sha256": "f41c990ad04adfd03b2234d1e81b6ee0b3acdaa22fba7e0a51da675c5c53dce7"
+        },
+        {
+          "id": 19,
+          "input": "jobs/jobs19.in",
+          "answer": "jobs/jobs19.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 15",
+          "sha256": "f8e38763b31cd3eccc5e6bf4ddbfb12049431b2e2719fb94f26cd0a3344a061a"
+        },
+        {
+          "id": 20,
+          "input": "jobs/jobs20.in",
+          "answer": "jobs/jobs20.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 16",
+          "sha256": "7a189aa9e12ba523b17f62c4601d666cc1ac84e72ddfee6c506c77ed486a6a22"
+        }
+      ],
+      "source": "t2.zip"
+    },
+    "median": {
+      "tests": [
+        {
+          "id": 1,
+          "input": "median/median01.in",
+          "answer": "median/median01.ans",
+          "points": 5,
+          "origin": "自制",
+          "sha256": "a977e1a50752ca39d868979fa3e9aea14eadc4a360cf898be616d281e3ddae42"
+        },
+        {
+          "id": 2,
+          "input": "median/median02.in",
+          "answer": "median/median02.ans",
+          "points": 5,
+          "origin": "自制",
+          "sha256": "1d3892bb9d0bf8eb4f2390bc091f19d0fe9c78f4b0230fb86737746b6a417091"
+        },
+        {
+          "id": 3,
+          "input": "median/median03.in",
+          "answer": "median/median03.ans",
+          "points": 5,
+          "origin": "自制",
+          "sha256": "db940bfc1d6188f8e5c35f4f87e588de1049dabfb57afa57a7758519b41041d5"
+        },
+        {
+          "id": 4,
+          "input": "median/median04.in",
+          "answer": "median/median04.ans",
+          "points": 5,
+          "origin": "自制",
+          "sha256": "ef732d4a1b7cbec0ef852164d9ed52dfa01bde4165bd02438cfadf7575a2fd26"
+        },
+        {
+          "id": 5,
+          "input": "median/median05.in",
+          "answer": "median/median05.ans",
+          "points": 5,
+          "origin": "自制",
+          "sha256": "4d30ecc16de5f5d6c8bfae70b4c947896a40e6d6ee9ac6c5283d1eb4382295ef"
+        },
+        {
+          "id": 6,
+          "input": "median/median06.in",
+          "answer": "median/median06.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 2",
+          "sha256": "aa48bd986992b82736f7c551f207e63147b472bc3ec71bfbd94b8a2cf99a03e1"
+        },
+        {
+          "id": 7,
+          "input": "median/median07.in",
+          "answer": "median/median07.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 3",
+          "sha256": "b3522ddde830b10e3bbda26219dbf8c5c14b4968b19c50389d8dea705a341162"
+        },
+        {
+          "id": 8,
+          "input": "median/median08.in",
+          "answer": "median/median08.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 4",
+          "sha256": "59bd411b4daf190a7e010463fd569b4f816fb26771183eb78a4e3eedd4bdc1ec"
+        },
+        {
+          "id": 9,
+          "input": "median/median09.in",
+          "answer": "median/median09.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 5",
+          "sha256": "b63debb23fd8550fae40bbce4fb3676ca9e2e200461d309db257efbdc6e4b7fc"
+        },
+        {
+          "id": 10,
+          "input": "median/median10.in",
+          "answer": "median/median10.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 6",
+          "sha256": "84d50403c395c6b50f1aea0923c94f3ee51efe52d3a68cabb2795b17f1e2ee29"
+        },
+        {
+          "id": 11,
+          "input": "median/median11.in",
+          "answer": "median/median11.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 7",
+          "sha256": "536979e20cdff3ffa1d697bde06d09b50a3104e8f0eaec378bf11803349ebb8a"
+        },
+        {
+          "id": 12,
+          "input": "median/median12.in",
+          "answer": "median/median12.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 8",
+          "sha256": "94e398445afc496f430231094b54c746be7107de6e678c6be4465f9f2c2a88b2"
+        },
+        {
+          "id": 13,
+          "input": "median/median13.in",
+          "answer": "median/median13.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 9",
+          "sha256": "bf93f74d188739dce19dedd5d83af6d230af7ce5415daaa3674cd58178bf357d"
+        },
+        {
+          "id": 14,
+          "input": "median/median14.in",
+          "answer": "median/median14.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 10",
+          "sha256": "7d0973b063f5dad4be75dd8a011fd09c31eefa7da0b36b0d10ef42600ca9cb22"
+        },
+        {
+          "id": 15,
+          "input": "median/median15.in",
+          "answer": "median/median15.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 11",
+          "sha256": "8fbfff1e42fa7e8b92b1d424089cdb9a4c68382fc1d6b6049d9b6d46a1a97bd0"
+        },
+        {
+          "id": 16,
+          "input": "median/median16.in",
+          "answer": "median/median16.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 12",
+          "sha256": "b2302ff703b83335b22c8e5c32a1041e213513fc497f9cacc1e1ac3fe38ab3da"
+        },
+        {
+          "id": 17,
+          "input": "median/median17.in",
+          "answer": "median/median17.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 13",
+          "sha256": "dd58cc77ae3f10928ff732d6a90e98910d3cc1785433f5ee1d7b66c350470f94"
+        },
+        {
+          "id": 18,
+          "input": "median/median18.in",
+          "answer": "median/median18.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 14",
+          "sha256": "98192509fd96c9beacd62e6e5316829dcf64c961784f86626ae4cfbd55d3eeab"
+        },
+        {
+          "id": 19,
+          "input": "median/median19.in",
+          "answer": "median/median19.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 15",
+          "sha256": "47d96a1b9e948a5e9e0b976e9e8b6829c71c574af46119a06eff98fb164d70a1"
+        },
+        {
+          "id": 20,
+          "input": "median/median20.in",
+          "answer": "median/median20.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 16",
+          "sha256": "997c0158647a563f9a7c0df1b689ce0f1e21ac796ff8a35bdf33d75a0e3e3e4b"
+        }
+      ],
+      "source": "t3.zip"
+    },
+    "dfs": {
+      "tests": [
+        {
+          "id": 1,
+          "input": "dfs/dfs01.in",
+          "answer": "dfs/dfs01.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 4",
+          "sha256": "cbba71e0a348476841b1a7ff69ea2d3a7e2b87f89e47453f69b556ebcb282266"
+        },
+        {
+          "id": 2,
+          "input": "dfs/dfs02.in",
+          "answer": "dfs/dfs02.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 5",
+          "sha256": "cad9123d4f53f73a5ef69b7610330989edb0ad3aaa50e4226ed320a50ef5b168"
+        },
+        {
+          "id": 3,
+          "input": "dfs/dfs03.in",
+          "answer": "dfs/dfs03.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 6",
+          "sha256": "28a49dad3407b4f12bd2ea0f178b54fa8e61a0392f257547ac31f8d3e4229393"
+        },
+        {
+          "id": 4,
+          "input": "dfs/dfs04.in",
+          "answer": "dfs/dfs04.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 7",
+          "sha256": "8db4ce10847a31f917bbad89a4dcaf95646c53af76d7edbf518fe60dee18d7b0"
+        },
+        {
+          "id": 5,
+          "input": "dfs/dfs05.in",
+          "answer": "dfs/dfs05.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 8",
+          "sha256": "73d2bd9fbed6430f93f3f1a56e39b8e1e1ee53dd4339cc8fd520edac7c23dda0"
+        },
+        {
+          "id": 6,
+          "input": "dfs/dfs06.in",
+          "answer": "dfs/dfs06.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 9",
+          "sha256": "ec07d4533651a53b131328b56cc590625ef4ab5e0e4e3a31f76bf81bae491717"
+        },
+        {
+          "id": 7,
+          "input": "dfs/dfs07.in",
+          "answer": "dfs/dfs07.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 10",
+          "sha256": "5cbd84834f2920131e688ec3ead9a2b26a7083fb8bb445cfbeca41631d65ed27"
+        },
+        {
+          "id": 8,
+          "input": "dfs/dfs08.in",
+          "answer": "dfs/dfs08.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 11",
+          "sha256": "d22287ae344ed2f3df0d51d2622e5cfd46b3560b8074dfdac4fd032126fdb1cf"
+        },
+        {
+          "id": 9,
+          "input": "dfs/dfs09.in",
+          "answer": "dfs/dfs09.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 12",
+          "sha256": "ef07841cde45cd7af6df4df99c06adbe9294fef0fde2fc3f049e9971ab9ce33b"
+        },
+        {
+          "id": 10,
+          "input": "dfs/dfs10.in",
+          "answer": "dfs/dfs10.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 13",
+          "sha256": "41e18906693a1412287a6a2d83a7d95a9ae5722b61517837eb72d7279243c795"
+        },
+        {
+          "id": 11,
+          "input": "dfs/dfs11.in",
+          "answer": "dfs/dfs11.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 14",
+          "sha256": "c6896f696f8bf9611b87c87b096c8841c4c8bb3c83723986f02b72c334905f9f"
+        },
+        {
+          "id": 12,
+          "input": "dfs/dfs12.in",
+          "answer": "dfs/dfs12.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 15",
+          "sha256": "33945c2b572bfca00bef4a8ee4708329b09ccb162e2cca895c3857207e052bba"
+        },
+        {
+          "id": 13,
+          "input": "dfs/dfs13.in",
+          "answer": "dfs/dfs13.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 16",
+          "sha256": "12480fa879d99ea4cb1b6fb0cdad89b544209b3c3f193494cb0b363898608d0f"
+        },
+        {
+          "id": 14,
+          "input": "dfs/dfs14.in",
+          "answer": "dfs/dfs14.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 17",
+          "sha256": "6ffbf7d01ce3ffe3cb7df548880eea93f23ae9db089c0268bcc486b41cc2162a"
+        },
+        {
+          "id": 15,
+          "input": "dfs/dfs15.in",
+          "answer": "dfs/dfs15.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 18",
+          "sha256": "ecc0fc812a3242e7397849c3c3841daf7f393648599f963f6b887133881b4c60"
+        },
+        {
+          "id": 16,
+          "input": "dfs/dfs16.in",
+          "answer": "dfs/dfs16.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 19",
+          "sha256": "88d3593582b84a897684c6b486b9c90382f6668157b9e9ea8fed0bce3d68157a"
+        },
+        {
+          "id": 17,
+          "input": "dfs/dfs17.in",
+          "answer": "dfs/dfs17.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 20",
+          "sha256": "921bed3b3d8d31849e8e4e76d2e0a0fe8899038984cc5ef4031ba62f12e53088"
+        },
+        {
+          "id": 18,
+          "input": "dfs/dfs18.in",
+          "answer": "dfs/dfs18.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 21",
+          "sha256": "479fd9d53aabda3240dba24b00509d4570206beebb1be84fab0b8b920e86f2c7"
+        },
+        {
+          "id": 19,
+          "input": "dfs/dfs19.in",
+          "answer": "dfs/dfs19.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 22",
+          "sha256": "f98a257a0329bd9112b2c451c1cacfcf200a3d1bc503aeb69e333e196d92be80"
+        },
+        {
+          "id": 20,
+          "input": "dfs/dfs20.in",
+          "answer": "dfs/dfs20.ans",
+          "points": 5,
+          "origin": "USACO 原始测试点 23",
+          "sha256": "0552b53cdc9fb8c99b5cace8701970b93c48562a855c0fd20ff8cc9e00aba5c4"
+        }
+      ],
+      "source": "t4.zip"
+    }
+  }
+}

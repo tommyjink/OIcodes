@@ -1,60 +1,60 @@
 #include<bits/stdc++.h>
-using namespace std;
 #define int long long
-int n,sl,sr;
-struct node{
-    int v,l,r,mp,id;
-}a[1000001];
-signed main(){
-    cin>>n;
-    for(int i=1;i<=n;i++){
-        string s;
-        cin>>s;
-        stack<char>st;
-        for(int j=0;j<s.size();j++){
-            if(s[j]=='(')st.push(s[j]);
-            else{
-                if(!st.empty()&&st.top()=='(')st.pop();
-                else st.push(s[j]);
-            }
-        }
-        int cur=0;
-        while(!st.empty()){
-            char c=st.top();
-            st.pop();
-            if(c=='(')a[i].l++;
-            else a[i].r++;
-        }
-        for(int j=0;j<s.size();j++){
-            if(s[j]=='(')cur++;
-            else cur--;
-            a[i].mp=min(a[i].mp,cur);
-        }
-        a[i].v=a[i].l-a[i].r,a[i].id=i;
-        sl+=a[i].l,sr+=a[i].r;
+#define endl "\n"
+using namespace std;
+const int N=1e5+10,P=998244353;
+int n,a[N],b[N],f[N],g[N],x[N],tot=0;
+string s;
+int qpow(int x,int y)
+{
+    int res=1;
+    while(y)
+    {
+        if(y&1)res=res*x%P;
+        y>>=1;
+        x=x*x%P;
     }
-    if(sl!=sr){
-        cout<<"impossible";
-        return 0;
+    return res;
+}
+void solve()
+{
+    cin>>n>>s;
+    s=" "+s;
+    tot=0;
+    for(int i=1;i<=n;i++)
+    {
+        a[i]=s[i]-'0';
+        b[i]=b[i-1]+a[i];
+        if(a[i])x[++tot]=i;
     }
-    sort(a+1,a+n+1,[](const node&x,const node&y){
-        if((x.r<=x.l)!=(y.r<=y.l))return x.r<=x.l;
-        if(x.r<=x.l)return x.r<y.r;
-        return x.l>y.l;
-    });
-    long long sum=0;
-    for(int i=1;i<=n;i++){
-        if(sum+a[i].mp<0){
-            cout<<"impossible";
-            return 0;
-        }
-        sum+=a[i].v;
+    for(int i=0;i<=x[tot];i++)
+        f[i]=g[i]=0;
+    f[0]=1;
+    int cnt=0;
+    for(int i=1;i<=tot;i++)
+    {
+        if(i==x[i]){cnt++;continue;}
+        g[0]=f[0];
+        for(int j=1;j<=x[i]-cnt;j++)
+            g[j]=(g[j-1]+f[j])%P;
+        for(int j=0;j<=x[tot]-cnt;j++)
+            f[j]=g[j];
+        // for(int j=0;j<=x[tot]-cnt;j++)
+        //     cout<<f[j]<<" ";
+        // cout<<endl;
     }
-    if(sum!=0){
-        cout<<"impossible";
-        return 0;
-    }
-    for(int i=1;i<=n;i++){
-        cout<<a[i].id<<endl;
-    }
+    int ans=0;
+    for(int i=0;i<=x[tot]-cnt;i++)
+        ans=(ans+f[i])%P;
+    
+    cout<<ans<<endl;
+
+}
+signed main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;cin>>t;
+    while(t--)solve();
+    return 0;
 }

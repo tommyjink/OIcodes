@@ -77,6 +77,10 @@
         "cstddef": "cpp"
     },
     "C_Cpp.default.compilerPath": "/usr/bin/clang",
+    "C_Cpp.default.includePath": [
+        "${workspaceFolder}/**",
+        "/Users/chenghanjin/.local/include"
+    ],
     "C_Cpp.errorSquiggles": "enabled",
     "git.ignoreLimitWarning": true
 }
