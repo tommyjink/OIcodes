@@ -16,6 +16,10 @@ int check(int mid)
     }
     return res;
 }
+int slope(int mid)
+{
+    return check(mid+1)-check(mid);
+}
 void solve()
 {
     cin>>n>>x>>y;
@@ -26,21 +30,34 @@ void solve()
     //     cout<<check(i)<<" ";
     // cout<<endl;
     int l=0,r=mx;
+    if(mx<=100)
+    {   
+        int ans=2e18;
+        for(int i=0;i<=mx;i++)
+            ans=min(ans,check(i));
+        cout<<ans<<endl;
+        return;
+    }
     while(r-l>2)
     {
         int len=(r-l)/3;
         int p1=l+len,p2=l+len*2;
         // cout<<l<<"~"<<r<<":"<<p1<<","<<p2<<endl;
-        if(check(p1)<check(p2))r=p2;
+        if(slope(p1)<slope(p2))r=p2;
         else l=p1;
     }
-    int ans=1e18;
-    // cout<<l<<","<<r<<endl;
-    for(int i=max(0ll,l-10);i<=min(mx,l+10);i++)
+    int ans=2e18;
+    l=max(0ll,l-5),r=mx;
+    while(l<r)
     {
-        ans=min(ans,check(i));
-        // cout<<i<<":"<<check(i)<<endl;
+        int mid=(l+r)>>1;
+        if(slope(mid)<0)l=mid+1;
+        else r=mid;
     }
+    for(int i=max(0ll,l-5);i<=min(mx,l+5);i++)
+        ans=min(ans,check(i));
+    ans=min(ans,check(0));
+    ans=min(ans,check(mx));
     for(int i=0;i<=mx;i++)
         cout<<i<<":"<<check(i)<<endl;
     cout<<ans<<endl;
