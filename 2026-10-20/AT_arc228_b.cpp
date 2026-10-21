@@ -2,8 +2,8 @@
 #define int long long
 #define endl "\n"
 using namespace std;
-const int N=1e6+10;
-int n,p[N],a[N],b[N];
+const int N=1e6+10,INF=1e18;
+int n,p[N],a[N],b[N],cnt[N];
 struct node
 {
     int l,r,mn,pos;
@@ -49,7 +49,13 @@ void modify(int k,int x,int d)
 }
 int query(int k,int l,int r)
 {
-    
+    if(t[k].l>r||t[k].r<l)return 0;
+    if(l<=t[k].l&&t[k].r<=r)return t[k].pos;
+    int pos1=query(k*2,l,r);
+    int pos2=query(k*2+1,l,r);
+    if(!pos1||!pos2)return pos1+pos2;
+    if(b[pos1]<=b[pos2])return pos1;
+    return pos2;
 }
 signed main()
 {
@@ -59,15 +65,24 @@ signed main()
     for(int i=1;i<=n;i++)cin>>p[i];
     for(int i=1;i<=n;i++)cin>>b[i];
     for(int i=1;i<=n;i++)a[i]=b[p[i]];
+    for(int i=1;i<=n;i++)b[i]=a[i],cnt[i]=0;
     stack<int> s;
-    int lst=0;
-    for(int i=1;i<=n;i++)
+    int lst=0,ans=0;
+    build(1,1,n);
+    s.push(1);
+    for(int i=2;i<=n;i++)
     {
         while(!s.empty()&&p[s.top()]<p[i])s.pop();
         if(!s.empty())lst=s.top();
         else lst=1;
-
+        int p=query(1,lst,i-1);
+        // cout<<i<<":"<<p<<endl;
+        ans+=b[p];
+        cnt[p]++;
+        b[p]=a[p]*((cnt[p]+1)*(cnt[p]+1)-cnt[p]*cnt[p]);
+        modify(1,p,b[p]);
         s.push(i);
     }
+    cout<<ans<<endl;
     return 0;
 }
