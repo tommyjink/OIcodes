@@ -3,18 +3,44 @@
 #define endl "\n"
 using namespace std;
 const int N=1e6+10;
-int n,a[N],b[N];
-int id[N];
-bool cmp(int x,int y)
+int n,mn[N];
+struct node
 {
-    if()
+    int a,b;
+}p[N];
+bool cmp(node x,node y)
+{
+    if(x.a-x.b==y.a-y.b)
+        return x.b>y.b;
+    return x.a-x.b<y.a-y.b;
 }
 void solve()
 {
+    int sa=0,sb=0;
     cin>>n;
     for(int i=1;i<=n;i++)
-        cin>>a[i]>>b[i],id[i]=i;
-    
+        cin>>p[i].a>>p[i].b,
+        sa+=p[i].a,sb+=p[i].b;
+    sort(p+1,p+1+n,cmp);
+    mn[n+1]=1e18;
+    for(int i=n;i>=1;i--)
+        mn[i]=min(mn[i+1],p[i].b);
+    if(sb-mn[1]<sa){cout<<-1<<endl;return;}
+    int k=n;
+    for(int i=1;i<=n;i++)
+        if(sb-mn[i+1]<sa){k=i;break;}
+    int r=0,ans=0;
+    for(int i=1;i<=n;i++)
+    {
+        if(i==k)continue;
+        ans+=p[i].a;
+        int tmp=min(r,p[i].a);
+        p[i].a-=tmp,r-=tmp;
+        p[k].a+=p[i].a;
+        r+=p[i].b;
+    }
+    ans+=p[k].a;
+    cout<<ans<<endl;
 }
 signed main()
 {
