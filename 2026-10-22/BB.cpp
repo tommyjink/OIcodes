@@ -48,6 +48,7 @@ signed main()
     for(int i=1;i<=n-1;i++)
     {
         f[i][i+1][0]=1;
+        w[i][i+1]=1;
         for(int j=0;j<=n;j++)
             g[i][i+1][j]=1;
     }
@@ -56,9 +57,9 @@ signed main()
         for(int i=1;i<=n-len+1;i++)
         {
             int j=i+len-1;
-            for(int m=i+1;m<=j-1;m++)
+            for(int t=1;t<=j-i-1;t++)
             {
-                for(int t=1;t<=j-i-1;t++)
+                for(int m=i+1;m<=j-1;m++)
                 {
                     if(a[m]!=t&&a[m]!=-1)continue;
                     int x=0,y=0;
@@ -67,6 +68,8 @@ signed main()
                     add(f[i][j][t],C(j-i-2,m-i-1)*(x-y+P)%P);    
                 }
             }
+            for(int t=1;t<=n;t++)
+                g[i][j][t]=(g[i][j][t-1]+f[i][j][t])%P;
             w[i][j]=g[i][j][j-i-1];
         }
     }
@@ -91,7 +94,7 @@ signed main()
     int ans=0;
     for(int i=1;i<=n;i++)
     {
-        add(ans,L[i]*R[i]%P);
+        add(ans,C(n-1,i-1)*L[i]%P*R[i]%P);
     }
     cout<<ans<<endl;
     return 0;
