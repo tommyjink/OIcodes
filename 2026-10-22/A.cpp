@@ -4,7 +4,7 @@
 #define pii pair<int,int>
 using namespace std;
 const int N=3e5+10;
-int n,k,a[N];
+int n,k,a[N],b[N],cnt=0;
 int lg[N],f[N][21];
 vector<pii> v;
 void init()
@@ -48,7 +48,31 @@ signed main()
             if(query(mid,n)<a[i])l=mid;
             else r=mid-1;
         }
-        
+        l=max(l,i);
+        // cout<<i<<","<<l<<endl;
+        if(i<=nowr)nowr=max(nowr,l);
+        else 
+        {
+            if(nowl!=nowr)v.push_back({nowl,nowr});
+            nowl=i,nowr=l;
+        }
     }
+    if(nowl!=nowr)v.push_back({nowl,nowr});
+    int sum=0;
+    for(auto [x,y]:v)sum+=y-x+1;
+    if(v.size()<=k)cout<<sum<<endl,exit(0);
+    int lst=v[0].second;
+    for(int i=1;i<v.size();i++)
+    {
+        int x=v[i].first;
+        b[++cnt]=x-lst-1;
+        lst=v[i].second;
+    }
+    // for(int i=1;i<=cnt;i++)
+    //     cout<<b[i]<<endl;
+    sort(b+1,b+1+cnt);
+    for(int i=1;i<=v.size()-k;i++)
+        sum+=b[i];
+    cout<<sum<<endl;
     return 0;
 }
