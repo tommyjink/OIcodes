@@ -4,12 +4,12 @@
 using namespace std;
 const int N=1e6+10;
 int n,a[N],p[N],siz[N],cnt[N],tag=1,dfn[N];
-int b[N],now=0;
+int b[N],num=0;
 vector<int> g[N];
 void dfs(int x)
 {
-    dfn[x]=++now;
-    b[now]=x;
+    dfn[x]=++num;
+    b[num]=x;
     siz[x]=1;
     for(int v:g[x])
     {
@@ -21,12 +21,12 @@ bool cmp(int x,int y)
 {
     for(int i=1;i<=min(siz[x],siz[y]);i++)
     {
-        int xx=b[dfn[x]+1-i];
-        int yy=b[dfn[y]+1-i];
+        int xx=b[dfn[x]+i-1];
+        int yy=b[dfn[y]+i-1];
         if(cnt[xx]!=cnt[yy])
             return cnt[xx]<cnt[yy];
     }
-    return siz[x]<siz[y];
+    return siz[x]<=siz[y];
 }
 void solve()
 {
@@ -50,7 +50,7 @@ void solve()
     }
     // for(int i=1;i<=n;i++)
     //     for(int j:g[i])cout<<i<<","<<j<<endl;
-    dfs(n);
+    num=0,dfs(n);
     for(int i=1;i<=n;i++)
         if(b[i]!=a[i]){cout<<"No"<<endl;return;}
     for(int i=1;i<=n;i++)
@@ -60,10 +60,10 @@ void solve()
         {
             if(!lst||cmp(lst,v))
                 lst=v;
+            else {cout<<"No"<<endl;return;}
         }
     }
-    if(tag)cout<<"Yes"<<endl;
-    else cout<<"No"<<endl;
+    cout<<"Yes"<<endl;
 }
 signed main()
 {
