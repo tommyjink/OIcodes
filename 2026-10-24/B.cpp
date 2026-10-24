@@ -3,19 +3,21 @@
 #define endl "\n"
 #define lowbit(x) (x&(-x))
 using namespace std;
-const int N=5005,M=N*N+10,INF=1e16;
+const int N=5005,M=N*N+10,INF=1e18;
 int n,m,w,k;
 int a[N],b[N],f[N][N];
 int c[M*2],cnt=0;
 int t[M*2];
 void upd(int x,int d)
 {
+    if(c[lower_bound(c+1,c+1+cnt,x)-c]!=x)cout<<"!!";
     x=lower_bound(c+1,c+1+cnt,x)-c;
     for(int i=x;i<=cnt;i+=lowbit(i))
         t[i]=min(t[i],d);
 }
 int query(int x)
 {
+    if(c[lower_bound(c+1,c+1+cnt,x)-c]!=x)cout<<"!!";
     int res=INF;
     x=lower_bound(c+1,c+1+cnt,x)-c;
     for(int i=x;i;i-=lowbit(i))
@@ -31,9 +33,13 @@ signed main()
         cin>>a[i],a[i]+=a[i-1];
     for(int i=1;i<=m;i++)
         cin>>b[i],b[i]+=b[i-1];
-    for(int i=1;i<=n;i++)
+    // for(int i=1;i<=n;i++)
+    //     cout<<a[i]<<" ";cout<<endl;
+    // for(int i=1;i<=m;i++)
+    //     cout<<b[i]<<" ";cout<<endl;
+    for(int i=0;i<=n;i++)
     {
-        for(int j=1;j<=m;j++)
+        for(int j=0;j<=m;j++)
         {
             c[++cnt]=a[i]+b[j];
             c[++cnt]=a[i]+b[j]+w;
@@ -44,14 +50,15 @@ signed main()
     for(int i=0;i<=cnt;i++)
         t[i]=INF;
     f[n][m]=0;
-    upd(n+m,0);
+    upd(a[n]+b[m],0);
     for(int i=n;i>=0;i--)
     {
         for(int j=m;j>=0;j--)
         {
             if(i==n&&j==m)continue;
             f[i][j]=query(a[i]+b[j]+w)+1;
-            printf("f[%lld][%lld]=%lld\n",i,j,f[i][j]);
+            // printf("f[%lld][%lld]=%lld\n",i,j,f[i][j]);
+            upd(a[i]+b[j],f[i][j]);
         }
     }
     cout<<f[0][0]*k<<endl;
