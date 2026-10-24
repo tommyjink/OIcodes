@@ -9,19 +9,19 @@ int a[N],b[N],f[N][N];
 int d[M*2],now=0,t[M*2];
 struct node
 {
-    int i,j,x,y;
+    int i,j,x,y,val;
 }c[M];
 bool cmpi(node x,node y)
 {
-    return x.i==y.i?x.j<y.j:x.i<y.i;
+    return x.i==y.i?x.j>y.j:x.i>y.i;
 }
 bool cmpj(node x,node y)
 {
-    return x.j==y.j?x.i<y.i:x.j<y.j;
+    return x.j==y.j?x.i>y.i:x.j>y.j;
 }
 int get(int x)
 {
-    return lower_bound(d+1,d+1+now,c)-d;
+    return lower_bound(d+1,d+1+now,x)-d;
 }
 void upd(int x,int d)
 {
@@ -48,15 +48,17 @@ void cal(int l,int r)
     int p=l;
     for(int i=mid+1;i<=r;i++)
     {
-        while(p<=mid&&c[p].i<=c[i].i)
+        while(p<=mid&&c[p].j>=c[i].j)
         {
-            upd();
+            upd(c[p].y,c[p].val);
             p++;
         }
+        c[i].val=min(c[i].val,query(c[i].x)+1);
     }
+    for(int i=l;i<=mid;i++)
+        upd(c[p].y,-1);
     sort(c+mid+1,c+1+r,cmpi);
     cal(mid+1,r);
-    
 }
 signed main()
 {
@@ -71,8 +73,6 @@ signed main()
     //     cout<<a[i]<<" ";cout<<endl;
     // for(int i=1;i<=m;i++)
     //     cout<<b[i]<<" ";cout<<endl;
-    reverse(a+1,a+1+n);
-    reverse(b+1,b+1+m);
     for(int i=0;i<=n;i++)
     {
         for(int j=0;j<=m;j++)
@@ -87,9 +87,15 @@ signed main()
     {
         for(int j=0;j<=m;j++)
         {
-            c[++cnt]={i,j,get(a[i]+b[j]+w),get(a[i]+b[j])};
+            c[++cnt]={i,j,get(a[i]+b[j]+w),get(a[i]+b[j]),INF};
+            if(i==n&&j==m)c[cnt].val=0;
         }
     }
-
+    sort(c+1,c+1+cnt,cmpi);
+    cal(1,cnt);
+    int ans=0;
+    for(int i=1;i<=cnt;i++)
+        ans=max(ans,c[i].val);
+    cout<<ans<<endl;
     return 0;
 }
