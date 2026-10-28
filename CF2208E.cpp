@@ -24,7 +24,7 @@ void cal(int l,int r)
         {
             for(int j=1;j<=i-l;j++)
             {
-                f[i][j]=f[a[i]][j-1]*h[i-1]%P;
+                f[i][j]=f[a[i]][j-1]*h[i]%P;
                 g[i][j]=(g[i][j-1]+f[i][j])%P;
             }
         }
@@ -36,9 +36,9 @@ void cal(int l,int r)
                 g[i][j]=(g[i][j-1]+f[i][j])%P;
             }
         }
-        h[i]=g[i][i-l];
         tag[i]=1;
     }
+    h[r]=g[r-1][r-1-l];
     g[l][0]=f[l][0]=0;
 }
 void solve()
@@ -59,7 +59,7 @@ void solve()
     sort(b.begin(),b.end(),cmp);
     for(auto [l,r]:b)
         cal(l,r);
-    cout<<h[n]<<endl;
+    cout<<h[n+1]<<endl;
 }
 signed main()
 {
