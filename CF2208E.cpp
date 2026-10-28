@@ -15,7 +15,7 @@ bool cmp(node x,node y)
 vector<node> b;
 void cal(int l,int r)
 {
-    cout<<l<<","<<r<<endl;
+    // cout<<l<<","<<r<<endl;
     g[l][0]=f[l][0]=1;
     for(int i=l+1;i<r;i++)
     {   
@@ -32,7 +32,7 @@ void cal(int l,int r)
         {
             for(int j=1;j<=i-l;j++)
             {
-                f[i][j]=(g[i-1][i-1-l]-g[i-1][max(0ll,j-2)]+P)%P;
+                f[i][j]=(g[i-1][i-1-l]-((j-2)<0?0:g[i-1][j-2])+P)%P;
                 g[i][j]=(g[i][j-1]+f[i][j])%P;
             }
         }
@@ -44,6 +44,8 @@ void cal(int l,int r)
 void solve()
 {
     cin>>n;
+    b.clear();
+    h[0]=1;
     for(int i=0;i<=n;i++)
         for(int j=0;j<=n;j++)
             f[i][j]=g[i][j]=0;
