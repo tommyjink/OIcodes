@@ -3,7 +3,8 @@
 #define endl "\n"
 using namespace std;
 const int N=2e5+10;
-int n,q,tot,head[N],dep[N],fa[N][20];
+int n,q,tot,cnt,head[N],dep[N],pos[N],lg[N*2];
+signed f[N*2][20];
 struct edge
 {
     int to,next;
@@ -14,18 +15,32 @@ struct node
 }t[N*4];
 void add(int x,int y)
 {
-    e[++tot]=(edge){y,head[x]};
+    e[++tot]={y,head[x]};
     head[x]=tot;
+}
+int calc(int x,int y)
+{
+    return dep[x]<dep[y]?x:y;
+}
+void dfs(int x,int fa)
+{
+    dep[x]=dep[fa]+1;
+    pos[x]=++cnt;
+    f[cnt][0]=x;
+    for(int i=head[x];i;i=e[i].next)
+    {
+        int y=e[i].to;
+        if(y==fa)continue;
+        dfs(y,x);
+        f[++cnt][0]=x;
+    }
 }
 int lca(int x,int y)
 {
-    if(dep[x]<dep[y])swap(x,y);
-    for(int i=19;i>=0;i--)
-        if(dep[fa[x][i]]>=dep[y])x=fa[x][i];
-    if(x==y)return x;
-    for(int i=19;i>=0;i--)
-        if(fa[x][i]!=fa[y][i])x=fa[x][i],y=fa[y][i];
-    return fa[x][0];
+    int l=pos[x],r=pos[y];
+    if(l>r)swap(l,r);
+    int k=lg[r-l+1];
+    return calc(f[l][k],f[r-(1<<k)+1][k]);
 }
 int dis(int x,int y)
 {
@@ -35,7 +50,7 @@ int dis(int x,int y)
 void upd(node &a,int &mx,int x,int y)
 {
     int d=dis(x,y);
-    if(d>mx)mx=d,a=(node){x,y};
+    if(d>mx)mx=d,a={x,y};
 }
 node merge(node a,node b)
 {
@@ -48,7 +63,7 @@ node merge(node a,node b)
 }
 void build(int p,int l,int r)
 {
-    if(l==r){t[p]=(node){l,l};return;}
+    if(l==r){t[p]={l,l};return;}
     int mid=(l+r)>>1;
     build(p<<1,l,mid);build(p<<1|1,mid+1,r);
     t[p]=merge(t[p<<1],t[p<<1|1]);
@@ -56,32 +71,23 @@ void build(int p,int l,int r)
 node query(int p,int l,int r,int L,int R)
 {
     if(L<=l&&r<=R)return t[p];
-    int mid=(l+r)>>1;node res=(node){0,0};
+    int mid=(l+r)>>1;
+    node res={0,0};
     if(L<=mid)res=merge(res,query(p<<1,l,mid,L,R));
     if(R>mid)res=merge(res,query(p<<1|1,mid+1,r,L,R));
     return res;
 }
 signed main()
 {
-    freopen("interval.in","r",stdin);
-    freopen("interval.out","w",stdout);
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cin>>n>>q;
     for(int i=1,x,y;i<n;i++)cin>>x>>y,add(x,y),add(y,x);
-    queue<int> que;que.push(1);dep[1]=1;
-    while(que.size())
-    {
-        int x=que.front();que.pop();
-        for(int i=head[x];i;i=e[i].next)
-        {
-            int y=e[i].to;
-            if(y==fa[x][0])continue;
-            fa[y][0]=x;dep[y]=dep[x]+1;que.push(y);
-        }
-    }
-    for(int j=1;j<20;j++)
-        for(int i=1;i<=n;i++)fa[i][j]=fa[fa[i][j-1]][j-1];
+    dfs(1,0);
+    for(int i=2;i<=cnt;i++)lg[i]=lg[i/2]+1;
+    for(int j=1;(1<<j)<=cnt;j++)
+        for(int i=1;i+(1<<j)-1<=cnt;i++)
+            f[i][j]=calc(f[i][j-1],f[i+(1<<(j-1))][j-1]);
     build(1,1,n);
     while(q--)
     {
