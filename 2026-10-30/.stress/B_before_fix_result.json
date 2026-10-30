@@ -1,0 +1,25 @@
+{
+  "problem": "B",
+  "seed": 20261096,
+  "source_sha256": "943378eb713cfa060eca932080ba9bea1f1d061dfa9889b620d2240d8a1dcf69",
+  "source_unchanged": true,
+  "counts": {
+    "sample": 1,
+    "greedy_order": 1,
+    "answer_cap": 1,
+    "exhaustive": 819,
+    "random": 1800,
+    "max_answer": 1
+  },
+  "failures": {
+    "greedy_order": 1,
+    "answer_cap": 1,
+    "exhaustive": 12,
+    "random": 519,
+    "max_answer": 1
+  },
+  "total": 2623,
+  "failed": 534,
+  "seconds": 21.878,
+  "max_process_seconds": 1.3729
+}

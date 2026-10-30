@@ -1,0 +1,27 @@
+{
+  "problem": "C",
+  "seed": 20261097,
+  "source_sha256": "575682c194bd1eed8d801a3b65332a5cc1f4e8e8caaa88c9c681b4c220bf79b6",
+  "source_unchanged": true,
+  "counts": {
+    "sample": 1,
+    "rounding": 1,
+    "nested_interval": 1,
+    "gap_after_target": 1,
+    "nan_radius": 1,
+    "binary_upper_bound": 1,
+    "random": 1000
+  },
+  "failures": {
+    "rounding": 1,
+    "nested_interval": 1,
+    "gap_after_target": 1,
+    "nan_radius": 1,
+    "binary_upper_bound": 1,
+    "random": 770
+  },
+  "total": 1006,
+  "failed": 775,
+  "seconds": 10.957,
+  "max_process_seconds": 1.3738
+}

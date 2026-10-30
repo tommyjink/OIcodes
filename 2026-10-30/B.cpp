@@ -2,22 +2,27 @@
 #define int long long
 #define endl "\n"
 using namespace std;
-const int N=1e3+10;
-int n,xx[N],yy[N],x[N],y[N];
+const int N=1e3+10,inf=1e15;
+int n,xx[N],yy[N],x[N],y[N],d[N];
 int cal(int lim)
 {
     for(int i=1;i<=n;i++)
+    {
         xx[i]=x[i],yy[i]=y[i];
+        if(x[i]>lim&&y[i]>lim)return inf;
+    }
     int now=n/2;
     for(int i=1;i<=n;i++)
         if(yy[i]>lim)now--,swap(xx[i],yy[i]);
-    if(now<0)return 1000*1000;
+    if(now<0)return inf;
+    int cnt=0;
     for(int i=1;i<=n;i++)
-        if(xx[i]<=lim&&xx[i]>yy[i]&&now>0)
-            now--,swap(xx[i],yy[i]);
+        if(xx[i]<=lim&&xx[i]>yy[i])d[++cnt]=xx[i]-yy[i];
+    sort(d+1,d+cnt+1,greater<int>());
     int res=0;
     for(int i=1;i<=n;i++)
         res+=xx[i];
+    for(int i=1;i<=min(cnt,now);i++)res-=d[i];
     return res;
 }
 signed main()
@@ -27,9 +32,12 @@ signed main()
     cin>>n;
     for(int i=1;i<=n;i++)
         cin>>x[i]>>y[i];
-    int ans=1000*1000;
+    int ans=inf;
     for(int i=1;i<=1000;i++)
+    {
         ans=min(ans,i*cal(i));
+        // cout<<i<<" "<<cal(i)<<endl;
+    }
     cout<<ans<<endl;
     return 0;
 }

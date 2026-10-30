@@ -1,0 +1,19 @@
+{
+  "problem": "A",
+  "seed": 20261095,
+  "source_sha256": "304217ad624123594312faba29be87bf4c8f5bd4a407853ebcf4b0b0b1acefdc",
+  "source_unchanged": true,
+  "counts": {
+    "sample1": 1,
+    "sample2": 1,
+    "exhaustive": 2046,
+    "wrong_length": 2046,
+    "random": 500,
+    "boundary": 30
+  },
+  "failures": {},
+  "total": 4624,
+  "failed": 0,
+  "seconds": 35.456,
+  "max_process_seconds": 1.3972
+}

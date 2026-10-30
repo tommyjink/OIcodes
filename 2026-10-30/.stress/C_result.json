@@ -1,0 +1,20 @@
+{
+  "problem": "C",
+  "seed": 20261097,
+  "source_sha256": "6c2f13d25d5c4dbb23a9b402a0a16c1141cd880518347ded116571407aa34527",
+  "source_unchanged": true,
+  "counts": {
+    "sample": 1,
+    "rounding": 1,
+    "nested_interval": 1,
+    "gap_after_target": 1,
+    "nan_radius": 1,
+    "binary_upper_bound": 1,
+    "random": 1000
+  },
+  "failures": {},
+  "total": 1006,
+  "failed": 0,
+  "seconds": 11.562,
+  "max_process_seconds": 2.1666
+}

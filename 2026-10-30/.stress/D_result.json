@@ -1,0 +1,19 @@
+{
+  "problem": "D",
+  "seed": 20261098,
+  "source_sha256": "f83518a3ca12cb0d48f327bbebd640cbcb0c35202b8050c1e5afbfbb4f2a42d2",
+  "source_unchanged": true,
+  "counts": {
+    "sample": 1,
+    "exhaustive": 4094,
+    "random": 1000,
+    "catalan": 14,
+    "even_max": 1,
+    "long_valid_tree": 24
+  },
+  "failures": {},
+  "total": 5134,
+  "failed": 0,
+  "seconds": 39.063,
+  "max_process_seconds": 1.394
+}
