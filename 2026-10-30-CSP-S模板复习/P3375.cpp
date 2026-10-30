@@ -9,7 +9,7 @@ signed main()
 {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
-    cin>>s>>t;
+    cin>>t>>s;
     n=s.length();
     m=t.length();
     s=" "+s;
@@ -17,6 +17,16 @@ signed main()
     for(int now=0,i=2;i<=n;i++)
     {
         while(now&&s[now+1]!=s[i])now=nxt[now];
+        if(s[now+1]==s[i])now++;
+        nxt[i]=now;
     }
+    for(int now=0,i=1;i<=m;i++)
+    {
+        while(now&&s[now+1]!=t[i])now=nxt[now];
+        if(s[now+1]==t[i])now++;
+        if(now==n)cout<<i-n+1<<endl,now=nxt[now];
+    }
+    for(int i=1;i<=n;i++)
+        cout<<nxt[i]<<" ";
     return 0;
 }
