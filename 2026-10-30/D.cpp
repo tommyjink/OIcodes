@@ -33,4 +33,3 @@ signed main()
     }
     cout<<f[1][n]<<endl;
     return 0;
-}
