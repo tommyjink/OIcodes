@@ -28,9 +28,10 @@ void solve()
 {
     cin>>a>>b>>k;
     int ans=0;
-    for(int i=1;i<=a&&i+k<=b;i++)
-        ans=(ans+cal(i,i+k))%P;
-    cout<<(C(a+b,a)-C(a+b,a+k)+P)%P<<endl;
+    for(int i=0;i<=a&&i+k<=b;i++)
+        ans=(ans+cal(i,i+k-1)*C(a+b-i-(i+k),a-i)%P*(i+k)%P)%P;
+    if(b-a<k)ans=(ans+cal(a,b)*b%P)%P;
+    cout<<ans*qpow(C(a+b,a),P-2)%P<<endl;
 }
 signed main()
 {
