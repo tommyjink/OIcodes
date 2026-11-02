@@ -22,10 +22,10 @@ void solve()
         now=now*(n-i+1)/i;
         // cout<<now<<"!"<<endl;
         int h=now;
-        while(h--&&k--)ans+=i*cal(k+1);
-        if(k==-1)break;
+        while(h--&&k)ans+=i*cal(k),k--;
+        if(!k)break;
     }
-    if(~k)cout<<-1<<endl;
+    if(k)cout<<-1<<endl;
     else cout<<ans<<endl;
 }
 signed main()
