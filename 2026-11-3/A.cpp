@@ -45,13 +45,31 @@ void solve()
 {
     cin>>n;
     for(int i=1;i<=n;i++)
-        cin>>a[i],b[i]=b[i-1]+a[i];
+        cin>>a[i];
     sort(a+1,a+1+n);
-    int r=n;
-    for(int i=n;i>1;i--)
+    for(int i=1;i<=n;i++)
+        b[i]=b[i-1]+a[i];
+    // for(int i=1;i<=n;i++)
+    //     cout<<a[i]<<" ";
+    // cout<<endl;
+    int l=n,r=n;
+    node ans1={0,1},ans2={1,1};
+    for(l=n,r=n;l>1;l--)
     {   
-        
+        while(r>=l&&(b[r]-b[l-1]+a[1])>=a[l]*(r-l+2))r--;
+        // cout<<l<<","<<r<<","<<(b[r]-b[l-1]+a[1])<<" "<<(r-l+2)<<","<<a[l]<<endl;
+        ans1=max(ans1,{r-l+1,r-l+2});
+    }//31+35+37+42+43+44+45+46+47
+    for(l=1,r=1;r<n;r++)
+    {
+        while(l<=r&&(b[r]-b[l-1]+a[n])<a[r]*(r-l+2))l++;
+        ans2=min(ans2,{1,r-l+2});
     }
+    for(int i=2;i<=n;i++)
+        if(a[i]==a[i-1])ans2={0,1};
+    print(ans1);
+    print(ans2);
+    cout<<endl;
 }
 signed main()
 {
