@@ -8,6 +8,7 @@ int cnt2=0,cnt3=0;
 deque<int> A;
 void solve()
 {
+    A.clear();
     cin>>n>>x;
     if(n==1&&x!=2){cout<<"No"<<endl;return;}
     if(x==0)
@@ -17,22 +18,42 @@ void solve()
         cout<<endl;
         return;
     }
-    cnt2=cnt3=0;
-    while(x%2==0)cnt2++,x/=2;
-    while(x%3==0)cnt3++,x/=3;
-    // cout<<cnt2<<" "<<cnt3<<endl;
-    if(x>1||cnt2+cnt3*2>n){cout<<"No"<<endl;return;}
-    A.clear();
-    for(int i=1;i<=cnt2;i++)
-        A.push_back(i),A.push_back(i);
-    for(int i=cnt2+1;i<=cnt2+cnt3*2;i+=2)
+    int now=0;
+    for(int i=2;i*i<=x&&i-1<=n&&now<=n;i++)
     {
-        A.push_back(i);
-        A.push_back(i+1);
-        A.push_back(i);
-        A.push_back(i+1);
+        while(x%i==0)
+        {
+            x/=i;
+            now++;
+            A.push_back(now);
+            A.push_back(now);
+            for(int j=2;j<=i-1;j++)
+            {
+                now++;
+                A.pop_back();
+                A.push_back(now);
+                A.push_back(now-1);
+                A.push_back(now);
+            }
+        }   
     }
-    for(int i=cnt2+cnt3*2+1;i<=n;i+=2)
+    if(x>1&&x-1<=n)
+    {
+        now++;
+        A.push_back(now);
+        A.push_back(now);
+        for(int j=2;j<=x-1;j++)
+        {
+            now++;
+            A.pop_back();
+            A.push_back(now);
+            A.push_back(now-1);
+            A.push_back(now);
+        }
+        x=1;
+    }
+    if(x>1||now>n){cout<<"No"<<endl;return;}
+    for(int i=now+1;i<=n;i+=2)
     {
         if(i==n)
         {
