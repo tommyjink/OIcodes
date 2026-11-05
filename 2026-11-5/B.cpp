@@ -1,9 +1,11 @@
 #include<bits/stdc++.h>
 #define endl "\n"
+#define pii pair<int,int>
 using namespace std;
 const int N=2e5+10,INF=1e18;
-int n,m,h[N],l[N],r[N];
+int n,m,h[N],l[N],r[N],tag[N];
 vector<int> g[N];
+priority_queue<pii,vector<pii>,greater<pii> > q;
 struct info{int mx,cmx;};
 struct node
 {
@@ -16,9 +18,9 @@ bool cmp(int x,int y)
 }
 inline info merge(info x,info y)
 {
-    int id[4]={x.mx,x.mx,y.cmx,y.cmx};
-    sort(id,id+4);
-    return {id[0],id[1]};
+    int id[4]={x.mx,x.cmx,y.mx,y.cmx};
+    sort(id,id+4,cmp);
+    return {id[3],id[2]};
 }
 inline void pushup(int k)
 {
@@ -49,21 +51,12 @@ info query(int k,int l,int r)
 {
     if(t[k].l>r||t[k].r<l)return {0,0};
     if(l<=t[k].l&&t[k].r<=r)return t[k].c;
-    info x={0,0},y={0,0};
     return merge(query(k*2,l,r),query(k*2+1,l,r));
-}
-int get()
-{
-    int now=INF,res=0;
-    for(int i=1;i<=m;i++)
-    {
-        if(query())
-    }
 }
 signed main()
 {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
+    // ios::sync_with_stdio(false);
+    // cin.tie(nullptr);
     h[0]=-1;
     cin>>n>>m;
     for(int i=1;i<=n;i++)
@@ -75,11 +68,38 @@ signed main()
             g[j].push_back(i);
     }
     build(1,1,n);
+    // while(1)
+    // {
+    //     int l,r;cin>>l>>r;
+    //     cout<<query(1,l,r).mx<<" "<<query(1,l,r).cmx<<endl;
+    // }
+    for(int i=1;i<=m;i++)
+        q.push({h[query(1,l[i],r[i]).cmx],i});
     for(int i=1;i<=m;i++)
     {
-        info res=query(1,l[i],r[i]);
+        pii t;
+        info res;
+        while(1)
+        {
+            t=q.top();q.pop();
+            if(tag[t.second])continue;
+            res=query(1,l[t.second],r[t.second]);
+            if(h[res.cmx]!=t.first)continue;
+            break;
+        }
+        // cout<<t.first<<","<<t.second<<","<<res.mx<<","<<res.cmx<<endl;
         h[res.mx]=h[res.cmx];
         upd(1,res.mx);
+        tag[t.second]=true;
+        for(int j:g[res.mx])
+            q.push({h[query(1,l[j],r[j]).cmx],j});
     }
+    for(int i=1;i<=n;i++)
+        cout<<h[i]<<" ";
+    cout<<endl;
+    int ans=0;
+    for(int i=1;i<=n;i++)
+        ans+=h[i];
+    cout<<ans<<endl;
     return 0;
 }
