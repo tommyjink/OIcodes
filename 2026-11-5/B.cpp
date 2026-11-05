@@ -2,7 +2,7 @@
 #define endl "\n"
 #define pii pair<int,int>
 using namespace std;
-const int N=2e5+10,INF=1e18;
+const int N=2e5+10;
 int n,m,h[N],l[N],r[N],tag[N];
 vector<int> g[N];
 priority_queue<pii,vector<pii>,greater<pii> > q;
@@ -55,8 +55,8 @@ info query(int k,int l,int r)
 }
 signed main()
 {
-    // ios::sync_with_stdio(false);
-    // cin.tie(nullptr);
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
     h[0]=-1;
     cin>>n>>m;
     for(int i=1;i<=n;i++)
@@ -94,10 +94,10 @@ signed main()
         for(int j:g[res.mx])
             q.push({h[query(1,l[j],r[j]).cmx],j});
     }
-    for(int i=1;i<=n;i++)
-        cout<<h[i]<<" ";
-    cout<<endl;
-    int ans=0;
+    // for(int i=1;i<=n;i++)
+    //     cout<<h[i]<<" ";
+    // cout<<endl;
+    long long ans=0;
     for(int i=1;i<=n;i++)
         ans+=h[i];
     cout<<ans<<endl;
