@@ -1,87 +1,105 @@
 #include<bits/stdc++.h>
-#define int long long
 #define endl "\n"
+#define pii pair<int,int>
 using namespace std;
-const int N=1e6+10;
-int n,D,K,a[N];
-int lazy[N*4];
-vector<int> b;
+const int N=2e5+10,INF=1e18;
+int n,m,h[N],l[N],r[N],tag[N];
+vector<int> g[N];
+priority_queue<pii,vector<pii>,greater<pii> > q;
+struct info{int mx,cmx;};
 struct node
 {
-    int l,r,mx;
+    int l,r;
+    info c;
 }t[N*4];
-void pushup(int k)
+bool cmp(int x,int y)
 {
-    t[k].mx=max(t[k*2].mx,t[k*2+1].mx);
+    return h[x]<h[y];
 }
-void pushdown(int k)
+inline info merge(info x,info y)
 {
-    if(lazy[k])
-    {
-        lazy[k*2]+=lazy[k];
-        lazy[k*2+1]+=lazy[k];
-        t[k*2].mx+=lazy[k];
-        t[k*2+1].mx+=lazy[k];
-        lazy[k]=0;
-    }
+    int id[4]={x.mx,x.cmx,y.mx,y.cmx};
+    sort(id,id+4,cmp);
+    return {id[3],id[2]};
+}
+inline void pushup(int k)
+{
+    t[k].c=merge(t[k*2].c,t[k*2+1].c);
+    return;
 }
 void build(int k,int l,int r)
 {
     t[k].l=l,t[k].r=r;
-    lazy[k]=0;
     if(l==r)
     {
-        t[k].mx=0;
+        t[k].c={l,0};
         return;
     }
     int mid=(l+r)>>1;
-    build(k*2,l,r);
-    build(k*2+1,l,r);
+    build(k*2,l,mid);
+    build(k*2+1,mid+1,r);
     pushup(k);
 }
-void add(int k,int l,int r,int d)
+void upd(int k,int x)
 {
-    if(t[k].l>r||t[k].r<l)return ;
-    if(l<=t[k].l&&t[k].r<=r)
-    {
-        lazy[k]+=d;
-        t[k].mx+=d;
-        return;
-    }
-    pushdown(k);
-    add(k*2,l,r,d);
-    add(k*2+1,l,r,d);
+    if(t[k].l>x||t[k].r<x)return;
+    if(t[k].l==t[k].r)return;
+    upd(k*2,x),upd(k*2+1,x);
     pushup(k);
 }
-void solve()
+info query(int k,int l,int r)
 {
-    cin>>n>>D>>K;
-    for(int i=1;i<=n;i++)
-        cin>>a[i],b.push_back(a[i]);
-    b.push_back(0);
-    sort(b.begin(),b.end());
-    b.erase(unique(b.begin(),b.end()),b.end());
-    for(int i=1;i<=n;i++)
-        a[i]=lower_bound(b.begin(),b.end(),a[i])-b.begin();
-    int ans=0,l=1;
-    deque<int> q1,q2;
-    for(int r=1;r<=n;r++)
-    {
-        while(!q2.empty()&&q2.front()<=r-D)q2.pop_front();
-        while(!q2.empty()&&a[q2.back()]>=a[r])q2.pop_back();
-        q2.push_back(r);
-        if(r-l+1==D)
-        while(!check())
-        {
-            l++;
-        }
-    }
+    if(t[k].l>r||t[k].r<l)return {0,0};
+    if(l<=t[k].l&&t[k].r<=r)return t[k].c;
+    return merge(query(k*2,l,r),query(k*2+1,l,r));
 }
 signed main()
 {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-    int t;cin>>t;
-    while(t--)solve();
+    // ios::sync_with_stdio(false);
+    // cin.tie(nullptr);
+    h[0]=-1;
+    cin>>n>>m;
+    for(int i=1;i<=n;i++)
+        cin>>h[i];
+    for(int i=1;i<=m;i++)
+    {
+        cin>>l[i]>>r[i];
+        for(int j=l[i];j<=r[i];j++)
+            g[j].push_back(i);
+    }
+    build(1,1,n);
+    // while(1)
+    // {
+    //     int l,r;cin>>l>>r;
+    //     cout<<query(1,l,r).mx<<" "<<query(1,l,r).cmx<<endl;
+    // }
+    for(int i=1;i<=m;i++)
+        q.push({h[query(1,l[i],r[i]).cmx],i});
+    for(int i=1;i<=m;i++)
+    {
+        pii t;
+        info res;
+        while(1)
+        {
+            t=q.top();q.pop();
+            if(tag[t.second])continue;
+            res=query(1,l[t.second],r[t.second]);
+            if(h[res.cmx]!=t.first)continue;
+            break;
+        }
+        // cout<<t.first<<","<<t.second<<","<<res.mx<<","<<res.cmx<<endl;
+        h[res.mx]=h[res.cmx];
+        upd(1,res.mx);
+        tag[t.second]=true;
+        for(int j:g[res.mx])
+            q.push({h[query(1,l[j],r[j]).cmx],j});
+    }
+    for(int i=1;i<=n;i++)
+        cout<<h[i]<<" ";
+    cout<<endl;
+    int ans=0;
+    for(int i=1;i<=n;i++)
+        ans+=h[i];
+    cout<<ans<<endl;
     return 0;
 }
