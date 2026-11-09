@@ -2,9 +2,9 @@
 #define int long long
 #define endl "\n"
 using namespace std;
-const int N=1e6+10,M=N*21;
+const int N=1e6+10,M=N*41;
 int n,ans=0;
-int nxt[N][2],cnt[M],l[M];
+int nxt[M][2],cnt[M],l[M];
 int tot=0,siz[M];
 void dfs1(int x)
 {
@@ -63,6 +63,7 @@ int dfs(int x)
         while(cnt[x])
             dfs1(x);
     }
+    l[x]=min(l[nxt[x][0]],l[nxt[x][1]])+1;
     return siz[x];
 }
 signed main()
