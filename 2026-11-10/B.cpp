@@ -7,9 +7,9 @@ const int P=998244353;
 int n,m,q,T,dep[N];
 int tot,head[N],f[N];
 int a[N],b[N],suma[N],sumb[N];
-int ga[N],gb[N],l[N];
+int ga[N],gb[N],l[N],inv2=0;
 int cnt=0,c[N],l1[N],l2[N];
-int X,Y;
+int X,Y,B=0;
 struct node
 {
     int to,next;
@@ -18,6 +18,17 @@ struct xyz
 {
     int x,y,z;
 }r[N];
+int qpow(int x,int y)
+{
+    int res=1;
+    while(y)
+    {
+        if(y&1)res=res*x%P;
+        y>>=1;
+        x=x*x%P;
+    }
+    return res;
+}
 void add(int x,int y)
 {
     e[++tot]=(node){y,head[x]};
@@ -60,6 +71,7 @@ int lca(int x,int y)
 }
 void prep()
 {
+    ga[1]=gb[1]=0;
     dfs1(1,0);
     dfs(1,0);
     X=Y=0;
@@ -68,6 +80,7 @@ void prep()
         if(!X||ga[i]<ga[X])X=i;
         if(!Y||gb[i]<gb[Y])Y=i;
     }
+    B=ga[X]+gb[Y];
     int o=lca(X,Y);
     int x=X,y=Y;
     cnt=0;
@@ -90,12 +103,14 @@ void prep()
     for(int i=1;i<=cnt-1;i++)
         c[i]=ga[l[i+1]]-ga[l[i]];
     for(int i=1;i<=cnt-1;i++)
-        c[i]=
+        c[i]=min(c[i],gb[l[i]]-gb[l[i+1]]);
+    cnt--;
 }
 signed main()
 {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
+    inv2=qpow(2,P-2);
     cin>>n>>m>>q>>T;
     for(int i=1;i<=n-1;i++)
     {
@@ -110,12 +125,15 @@ signed main()
         if(r[i].x==1) a[r[i].y]+=r[i].z;
         else b[r[i].y]+=r[i].z;
     }
-    prep();
+    // prep();
     // for(int i=1;i<=n;i++)
     //     cout<<ga[i]<<" ";
     // cout<<endl;
     // for(int i=1;i<=n;i++)
     //     cout<<gb[i]<<" ";
+    // cout<<endl;
+    // for(int i=1;i<=cnt;i++)
+    //     cout<<c[i]<<" ";
     // cout<<endl;
     // cout<<X<<" "<<Y<<endl;
     while(q--)
@@ -132,6 +150,16 @@ signed main()
             else b[r[x].y]+=r[x].z;
         }
         prep();
+        int ans=B%P*T%P;
+        // cout<<B<<"!"<<endl;
+        for(int i=1;i<=cnt;i++)
+        {
+            int L=min(T,c[i]);
+            int sum1=L*(L+1)%P*inv2%P;
+            int sum2=(T-L)%P*(c[i]%P)%P;
+            ans=(ans+sum1+sum2)%P;
+        }
+        cout<<ans<<endl;
     }
     return 0;
 }
