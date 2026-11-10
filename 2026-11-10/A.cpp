@@ -11,23 +11,16 @@ char rev(char c)
     if(c=='S')return 'R';
     if(c=='R')return 'P';
 }
-bool check(int mid)
+void cal()
 {
-    int p=1,q=mid;
-    for(int i=1;i<=m;i++)
-        sav[i]=n;
-    while(p<=m&&q<=n)
+    sav[m]=n+1;
+    while(sav[m]>1&&rev(a[sav[m]-1])==b[m])sav[m]--;
+    for(int i=m-1;i>=1;i--)
     {
-        sav[p]=min(sav[p],q);
-        while(q<=n&&p<=m&&rev(a[q])==b[p])
-            q++;
-        if(q<=n&&p<=m&&a[q]==b[p])q++,p++;
-        sav[p]=min(sav[p],q);
-        if(q<=n&&p<=m&&a[q]==rev(b[p]))p++;
-        sav[p]=min(sav[p],q);
+        sav[i]=sav[i+1];
+        if(sav[i]>1&&a[sav[i]-1]==b[i])sav[i]--;
+        else while(sav[i]>1&&rev(a[sav[i]-1])==b[i])sav[i]--;
     }
-    if(p==m+1)return false;
-    return true;
 }
 void solve()
 {
@@ -36,21 +29,17 @@ void solve()
     m=b.length();
     a=" "+a+" ";
     b=" "+b+" ";
-    int l=1,r=n+1;
-    while(l<r)
-    {
-        int mid=(l+r)>>1;
-        if(check(mid))r=mid;
-        else l=mid+1;
-    }
-    check(l);
+    cal();
+    // for(int i=1;i<=m;i++)
+    //     cout<<sav[i]<<" ";
+    // cout<<endl;
     int p=1,ans=n;
     for(int i=1;i<=m;i++)
     {
+        // cout<<i<<" "<<p<<" "<<sav[i]<<endl;
+        ans=min(ans,sav[i]-p);
         while(p<=n&&rev(a[p])==b[i])p++;
-        ans=min(ans,sav[i]-i);
-        if(a[p]==b[i]){p++;continue;}
-        if(a[p]==rev(b[i]))continue;
+        if(p<=n&&a[p]==b[i])p++;
     }
     cout<<ans<<endl;
 }
