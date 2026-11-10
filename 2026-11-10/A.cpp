@@ -37,8 +37,8 @@ void solve()
     for(int i=1;i<=m;i++)
     {
         // cout<<i<<" "<<p<<" "<<sav[i]<<endl;
-        ans=min(ans,sav[i]-p);
         while(p<=n&&rev(a[p])==b[i])p++;
+        ans=min(ans,sav[i]-p);
         if(p<=n&&a[p]==b[i])p++;
     }
     cout<<ans<<endl;
