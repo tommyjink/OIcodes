@@ -19,7 +19,7 @@ void cal()
     {
         sav[i]=sav[i+1];
         if(sav[i]>1&&a[sav[i]-1]==b[i])sav[i]--;
-        else while(sav[i]>1&&rev(a[sav[i]-1])==b[i])sav[i]--;
+        while(sav[i]>1&&rev(a[sav[i]-1])==b[i])sav[i]--;
     }
 }
 void solve()
