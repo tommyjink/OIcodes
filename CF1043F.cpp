@@ -40,6 +40,7 @@ signed main()
             while(a[i]%d==0)a[i]/=d;
         }
         if(a[i]>1)v[i][++cnt[i]]=a[i];
+        for()
     }
     return 0;
 }
