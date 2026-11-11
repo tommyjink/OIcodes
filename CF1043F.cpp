@@ -3,8 +3,8 @@
 #define endl "\n"
 using namespace std;
 const int N=3e5+10,M=1100;
-int n,a[N],f[M],phi[N],vis[N],pri[N],tot=0;
-int cnt[N],v[N][10],fac[N];
+int n,a[N],phi[N],vis[N],pri[N],tot=0;
+int fac[N],cnt[N],g[M],f[M];
 void init()
 {
     phi[1]=1;
@@ -23,24 +23,57 @@ void init()
 }
 signed main()
 {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
+    // ios::sync_with_stdio(false);
+    // cin.tie(nullptr);
     init();
     // for(int i=1;i<=100;i++)
     //     cout<<phi[i]<<" ";
     cin>>n;
     for(int i=1;i<=n;i++)
+        cin>>a[i],cnt[a[i]]=1;
+    for(int i=1;i<N;i++)
+        for(int j=i;j<N;j+=i)
+            cnt[i]+=cnt[j];
+    int ans=1e9;
+    for(int i=1;i<=n;i++)
     {
-        cin>>a[i];
-        while(vis[a[i]])
+        int m=0,v[10]={0},t=a[i];
+        while(vis[t])
         {
-            cnt[i]++;
-            v[i][cnt[i]]=fac[a[i]];
-            int d=fac[a[i]];
-            while(a[i]%d==0)a[i]/=d;
+            // cout<<t<<endl;
+            v[++m]=fac[t];
+            while(t%v[m]==0)t/=v[m];   
         }
-        if(a[i]>1)v[i][++cnt[i]]=a[i];
-        for()
+        if(t>1)v[++m]=t;
+        for(int s=0;s<(1<<m);s++)
+        {
+            int tmp=1;
+            for(int j=1;j<=m;j++)
+                if(s&(1<<(j-1)))
+                    tmp*=v[j];
+            g[s]=cnt[tmp];
+        }
+        for(int s=(1<<m)-1;s>=0;s--)
+        {
+            for(int j=1;j<=m;j++)
+            {
+                if(s&(1<<(j-1)))continue;
+                g[s]-=g[s|(1<<(j-1))];
+            }
+        }
+        int full=(1<<m)-1;
+        f[0]=0;
+        for(int s=0;s<(1<<m);s++)
+        {
+            f[s]=1e9;
+            for(int t=s;t;t=(t-1)&s)
+            {
+                if(g[full^t])f[s]=min(f[s],f[s^t]+1);
+            }
+        }
+        ans=min(ans,f[full]);
     }
+    if(ans==1e9)cout<<-1<<endl;
+    else cout<<ans<<endl;
     return 0;
 }
