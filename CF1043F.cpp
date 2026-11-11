@@ -23,24 +23,26 @@ void init()
 }
 signed main()
 {
-    // ios::sync_with_stdio(false);
-    // cin.tie(nullptr);
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
     init();
-    // for(int i=1;i<=100;i++)
-    //     cout<<phi[i]<<" ";
     cin>>n;
     for(int i=1;i<=n;i++)
-        cin>>a[i],cnt[a[i]]=1;
+        cin>>a[i],cnt[a[i]]++;
     for(int i=1;i<N;i++)
-        for(int j=i;j<N;j+=i)
+    {
+        for(int j=2*i;j<N;j+=i)
+        {
             cnt[i]+=cnt[j];
+        }
+    }
     int ans=1e9;
     for(int i=1;i<=n;i++)
     {
+        if(a[i]==1)cout<<1<<endl,exit(0);
         int m=0,v[10]={0},t=a[i];
         while(vis[t])
         {
-            // cout<<t<<endl;
             v[++m]=fac[t];
             while(t%v[m]==0)t/=v[m];   
         }
@@ -53,9 +55,9 @@ signed main()
                     tmp*=v[j];
             g[s]=cnt[tmp];
         }
-        for(int s=(1<<m)-1;s>=0;s--)
+        for(int j=1;j<=m;j++) 
         {
-            for(int j=1;j<=m;j++)
+            for(int s=0;s<(1<<m);s++)
             {
                 if(s&(1<<(j-1)))continue;
                 g[s]-=g[s|(1<<(j-1))];
@@ -63,17 +65,17 @@ signed main()
         }
         int full=(1<<m)-1;
         f[0]=0;
-        for(int s=0;s<(1<<m);s++)
+        for(int s=1;s<(1<<m);s++)
         {
-            f[s]=1e9;
+            f[s]=n+1;
             for(int t=s;t;t=(t-1)&s)
-            {
                 if(g[full^t])f[s]=min(f[s],f[s^t]+1);
-            }
+            for(int t=s;t;t=(t-1)&s)
+                f[s^t]=min(f[s^t],f[s]);
         }
-        ans=min(ans,f[full]);
+        ans=min(ans,f[full]+1);
     }
-    if(ans==1e9)cout<<-1<<endl;
+    if(ans>n)cout<<-1<<endl;
     else cout<<ans<<endl;
     return 0;
 }
