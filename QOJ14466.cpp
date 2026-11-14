@@ -53,25 +53,25 @@ signed main()
             }
         }
     }
-    int ans=0;
+    int ans=0,num=0;;
     int len=n/2;
     for(int i=1;i<=len+1;i++)
     {
         int j=i+len-1;
-        ans=max(ans,a[i][j]);
-        ans=max(ans,b[i][j]);
+        if(a[i][j]>ans)ans=a[i][j],num=i;
+        if(b[i][j]>ans)ans=b[i][j],num=j;
         // if(k)
         // {
         //     if(ans=max(ans,);
         // }
     }
-    cout<<ans<<endl;
-    while(1)
-    {
-        int l,r;
-        cin>>l>>r;
-        if(l==0)break;
-        cout<<f[l][r]<<" "<<g[l][r]<<endl;
-    }
+    cout<<ans<<" "<<num<<endl;
+    // while(1)
+    // {
+    //     int l,r;
+    //     cin>>l>>r;
+    //     if(l==0)break;
+    //     cout<<f[l][r]<<" "<<g[l][r]<<endl;
+    // }
     return 0;
 }
