@@ -1,41 +1,44 @@
 #include<bits/stdc++.h>
-#define int long long
 #define endl "\n"
 #define ls(x) t[x].l
 #define rs(x) t[x].r
+#define ll long long
 using namespace std;
-const int N=1e6+10;
-int n,m,a[N],b[N],tot;
-int rt,x,y,z,sum[N];
+const int N=2e6+10;
+int n,m,tot;
+int rt,x,y,z;
+ll a[N],b[N],sum[N];
 vector<int> c;
 struct node
 {
     int l,r;
-    int val,pri,siz,sum;
-}t[N*2];
+    ll val;
+    int pri,siz;
+    ll sum;
+}t[N*10];
 void pushup(int k)
 {
     t[k].siz=t[ls(k)].siz+t[rs(k)].siz+1;
     t[k].sum=t[ls(k)].sum+t[rs(k)].sum+t[k].val;
 }
-int newnode(int val)
+int newnode(ll val)
 {
-    t[++tot]=(node){0,0,val,rand()};
+    t[++tot]=(node){0,0,val,rand(),1,val};
     return tot;
 }
-void split(int k,int &x,int &y,int val)
+void split(int k,int &x,int &y,ll val)
 {
     if(!k){x=y=0;return;}
     if(t[k].val<=val)
     {
         x=k;
-        split(y,rs(x),y,val);
+        split(rs(x),rs(x),y,val);
         pushup(x);
     }
     else
     {
         y=k;
-        split(y,x,ls(y),val);
+        split(ls(y),x,ls(y),val);
         pushup(y);
     }
 }
@@ -55,21 +58,22 @@ int merge(int x,int y)
         return y;
     }
 }
-void insert(int val)
+void insert(ll val)
 {
     split(rt,x,y,val);
     rt=merge(x,merge(newnode(val),y));
 }
-void del(int val)
+void del(ll val)
 {
     split(rt,x,y,val-1);
     split(y,y,z,val);
     y=merge(ls(y),rs(y));
     rt=merge(merge(x,y),z);
 }
-int query(int siz)
+ll query(int siz)
 {
-    int k=rt,res=0;
+    int k=rt;
+    ll res=0;
     while(k)
     {
         int now=t[ls(k)].siz+1;
@@ -77,6 +81,7 @@ int query(int siz)
         else if(now<siz)
         {
             res+=t[ls(k)].sum+t[k].val;
+            siz-=now;
             k=rs(k);
         }
         else
@@ -91,7 +96,7 @@ signed main()
     // ios::sync_with_stdio(false);
     // cin.tie(nullptr);
     srand(time(0));
-    while(1)
+    while(0)
     {
         int op,x;
         cout<<"1.insert\n2.del\n3.query\n";
@@ -128,15 +133,13 @@ signed main()
         a[i]=lower_bound(c.begin(),c.end(),a[i])-c.begin();
         sum[a[i]]+=c[a[i]];
     }
-    int ans=0;
     int l=c.size();
     for(int i=0;i<l;i++)
-        insert(sum[i]),ans+=sum[i];
+        insert(sum[i]);
     for(int i=1;i<=m;i++)
     {
         b[i]=lower_bound(c.begin(),c.end(),b[i])-c.begin();
         del(sum[b[i]]);
-        ans+=c[b[i]];
         sum[b[i]]+=c[b[i]];
         insert(sum[b[i]]);
         cout<<query(l-i)<<" ";
