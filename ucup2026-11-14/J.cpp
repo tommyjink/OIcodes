@@ -1,51 +1,45 @@
 #include<bits/stdc++.h>
 #define int long long
 #define endl "\n"
+#define pii pair<int,int>
 using namespace std;
 const int N=2e5+10;
 int n,a[N],b[N];
+pii q[N];
 void solve()
 {
     cin>>n;
     for(int i=1;i<=n;i++)cin>>a[i];
     for(int i=1;i<=n;i++)cin>>b[i];
-    sort(a+1,a+1+n,greater<int>());
-    sort(b+1,b+1+n,greater<int>());
-    int p=1,free=0;
-    for(int i=1;i<=n;i++)
+    sort(a+1,a+n+1);
+    sort(b+1,b+n+1);
+    int m=0;
+    for(int i=1;i<=n;)
     {
-        while(p<=n&&a[p]>b[i])p++,free++;
         int j=i;
         while(j<=n&&b[j]==b[i])j++;
-        j--;
-        // cout<<i<<","<<j<<"."<<free<<","<<n-p+1+free<<","<<b[i]<<endl;
-        if(n-p+1+free<b[i])
+        int cnt=j-i;
+        q[++m]={b[i]-cnt,b[i]};
+        i=j;
+    }
+    sort(q+1,q+m+1);
+    int sum=0;
+    for(int i=1;i<=m;i++)
+    {
+        int x=q[i].second,c=x-q[i].first;
+        if(sum+c>=x)
         {
-            // cout<<"??"<<endl;
-            int pp=p;
-            while(pp<=n&&a[p]==a[pp])pp++;
-            pp--;
-            if(a[p]==b[j]&&pp-p+1>=j-i+1)
-            {
-                p+=j-i+1;
-            }
-            else
+            sum+=c;
+        }
+        else
+        {
+            int cnt=upper_bound(a+1,a+n+1,x)-lower_bound(a+1,a+n+1,x);
+            if(cnt<c)
             {
                 cout<<"NO"<<endl;
                 return;
             }
         }
-        else
-        {
-            int tmp=min(free,j-i+1);
-            free-=tmp;
-            if(tmp<j-i+1)
-            {
-                p+=j-i+1-tmp;
-            }
-        }
-        // cout<<free<<"!"<<endl;
-        i=j;
     }
     cout<<"YES"<<endl;
 }
