@@ -25,23 +25,51 @@ void dfs1(int x)
 }
 void dfs(int x)
 {
+    vis[x]=true;
     vector<int> a,b;
     for(int v:g[x])
     {
-        if(v==fa[x])continue;
+        if(vis[v])continue;
+        dfs(v);
         if(u[v])a.push_back(v);
         if(d[v])b.push_back(v);
-        dfs(v);
     }
+    // cout<<x<<"!"<<endl;
+    // for(int i:a)cout<<i<<",";
+    // cout<<endl;
+    // for(int i:b)cout<<i<<",";
+    // cout<<endl;
     while(!a.empty()&&!b.empty())
     {
-        ans.push_back({a.back(),x});
+        ans.push_back({a.back(),x,x,b.back()});
+        a.pop_back();
+        b.pop_back();
+    }
+
+    // cout<<x<<"!"<<endl;
+    // for(int i:a)cout<<i<<",";
+    // cout<<endl;
+    // for(int i:b)cout<<i<<",";
+    // cout<<endl;
+    if(a.size()+b.size()>1)repo();
+    if(!a.empty())
+    {
+        if(!u[x])repo();
+        u[x]=0;
+        ans.push_back({a.back(),x,x,fa[x]});
+    }
+    if(!b.empty())
+    {
+        if(!d[x])repo();
+        d[x]=0;
+        // cout<<x<<"???"<<endl;
+        ans.push_back({fa[x],x,x,b.back()});
     }
 }
 signed main()
 {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
+    // ios::sync_with_stdio(false);
+    // cin.tie(nullptr);
     cin>>n>>m;
     for(int i=1;i<=m;i++)
     {
@@ -53,9 +81,12 @@ signed main()
     }
     for(int i=1;i<=n;i++)
         if(!vis[i])dfs1(i),rt[++cnt]=i;
+    for(int i=1;i<=n;i++)
+        vis[i]=0;
     for(int i=1;i<=cnt;i++)
-    {
-
-    }
+        dfs(rt[i]);
+    cout<<"Yes"<<endl;
+    for(auto [a,b,c,d]:ans)
+        cout<<a<<" "<<b<<" "<<c<<" "<<d<<endl;
     return 0;
 }
