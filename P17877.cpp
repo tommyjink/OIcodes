@@ -1,10 +1,26 @@
 #include<bits/stdc++.h>
-#define int long long
+#define int __int128
 #define endl "\n"
 using namespace std;
-const int N=1e5+10;
+const int N=1e5+10,INF=1e18;
 int n,m,k,a[N],b[N],c[N],id[N];
 int lazy[N*8];
+inline int read()
+{
+    int res=0;
+    char ch=getchar();
+    while(!isdigit(ch))ch=getchar();
+    while(isdigit(ch))res=res*10+(ch^'0'),ch=getchar();
+    return res;
+}
+inline void write(int x) {
+    if (x < 0) {
+        putchar('-');
+        x = -x;
+    }
+    if (x > 9) write(x / 10);
+    putchar(x % 10 + '0');
+}
 bool cmp(int x,int y)
 {
     return b[x]+c[x]>b[y]+c[y];
@@ -16,6 +32,7 @@ struct node
 void pushup(int k)
 {
     t[k].val=t[k*2].val+t[k*2+1].val;
+    t[k].mx=max(t[k*2].mx,t[k*2+1].mx);
 }
 void pushdown(int k)
 {
@@ -24,6 +41,8 @@ void pushdown(int k)
         lazy[k*2]=lazy[k*2+1]=lazy[k];
         t[k*2].val=lazy[k]*(t[k*2].r-t[k*2].l+1);
         t[k*2+1].val=lazy[k]*(t[k*2+1].r-t[k*2+1].l+1);
+        t[k*2].mx=lazy[k];
+        t[k*2+1].mx=lazy[k];
         lazy[k]=-1;
     }
 }
@@ -34,7 +53,7 @@ void build(int k,int l,int r)
     if(l==r)
     {
         t[k].val=a[l];
-        t[k].mx=a[l]
+        t[k].mx=a[l];
         return;
     }
     int mid=(l+r)>>1;
@@ -44,10 +63,11 @@ void build(int k,int l,int r)
 }
 void modify(int k,int l,int r,int d)
 {
-    if(t[k].l>r||t[k].r<l)return;
+    if(t[k].l>r||t[k].r<l||l>r)return;
     if(l<=t[k].l&&t[k].r<=r)
     {
         t[k].val=(t[k].r-t[k].l+1)*d;
+        t[k].mx=d;
         lazy[k]=d;
         return;
     }
@@ -56,43 +76,86 @@ void modify(int k,int l,int r,int d)
     modify(k*2+1,l,r,d);
     pushup(k);
 }
+int fd(int k,int l,int r,int x)
+{
+    if(t[k].l>r||t[k].r<l||l>r||t[k].mx<x)return 0;
+    if(t[k].l==t[k].r)return t[k].l;
+    pushdown(k);
+    if(t[k*2].mx>=x)return fd(k*2,l,r,x);
+    return fd(k*2+1,l,r,x);
+}
+int queryd(int k,int l,int r,int b,int &need)
+{
+    if(t[k].l>r||t[k].r<l||l>r)return 0;
+    if(l<=t[k].l&&t[k].r<=r)
+    {
+        int cc=(int)t[k].val-(int)b*(t[k].r-t[k].l+1);
+        if(cc<need)
+        {
+            need-=cc;
+            return 0;
+        }
+        if(t[k].l==t[k].r)return t[k].l;
+    }
+    pushdown(k);
+    int res=queryd(k*2,l,r,b,need);
+    if(res)return res;
+    return queryd(k*2+1,l,r,b,need);
+}
 
 int query(int k,int l,int r,int b,int c)
 {
-    if(t[k].l>r||t[k].r<l||t[k].val-b*(t[k].r-t[k].l+1)<c)return 0;
+    int need=c;
+    return queryd(k,l,r,b,need);
+}
+int sum(int k,int l,int r)
+{
+    if(t[k].l>r||t[k].r<l||l>r)return 0;
+    if(l<=t[k].l&&t[k].r<=r)return t[k].val;
     pushdown(k);
-    int tmp=t[k*2].val-b*(t[k*2].r-t[k*2].l+1);
-    if(tmp>=c)
-        return query(k*2,l,r,b,c);
-    else return query(k*2+1,l,r,b,c-tmp);
+    return sum(k*2,l,r)+sum(k*2+1,l,r);
 }
 void solve()
 {
-    cin>>n>>m>>k;
+    n=read();
+    m=read();
+    k=read();
+    int nn=n;
     for(int i=1;i<=n;i++)
-        cin>>a[i];
+        a[i]=read();
     for(int i=1;i<=m;i++)
-        cin>>b[i]>>c[i],id[i]=i;
+        b[i]=read(),c[i]=read();
     sort(a+1,a+1+n);
-    sort(id+1,id+1+m,cmp);
     build(1,1,n);
+    for(int i=1;i<=m;i++)
+    {
+        int p=0;
+        while(!(p=fd(1,1,n,b[i]))||!query(1,p,n,b[i]-1,c[i]))
+        {
+            if(n==1){cout<<"-1"<<endl;return;}
+            // cout<<"!!"<<i<<","<<p<<endl;
+            // for(int i=1;i<=n;i++)cout<<sum(1,i,i)<<" ";
+            // cout<<endl;
+            n--;
+            // cout<<sum(1,n,n+1)<<"?"<<endl;
+            modify(1,n,n,sum(1,n,n+1)-k);
+            modify(1,n+1,n+1,INF);
+        }
+        int r=query(1,p,n,b[i]-1,c[i]);
+        int cost=(int)(c[i]-sum(1,p,r-1)+(r-p)*(b[i]-1));
+        modify(1,p,r-1,b[i]-1);
+        modify(1,r,r,sum(1,r,r)-cost);
+    }
+    write(nn-n);
+    cout<<endl;
 }
 signed main()
 {
     // ios::sync_with_stdio(false);
     // cin.tie(nullptr);
-    build(1,1,n);
-    while(1)
-    {
-        int op;
-        cin>>op;
-        if(op==1)
-        {
-
-        }
-    }
     int c,t;
-    cin>>c>>t;
+    c=read();
+    t=read();
     while(t--)solve();
     return 0;
 }
