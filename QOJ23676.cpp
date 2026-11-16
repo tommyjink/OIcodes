@@ -13,7 +13,7 @@ struct node
 node merge(node x,node y)
 {
     int w=abs(h[x.r]-h[y.l])+1;
-    return {x.l,y.r,min(x.L,y.L+w+x.D),min(x.D+w+y.R,y.R),x.D+y.D+w,min(x.M,y.M)};
+    return {x.l,y.r,min(x.L,y.L+w+x.D),min(x.R+w+y.D,y.R),x.D+y.D+w,min(x.M,y.M)};
 }
 void pushup(int k)
 {
@@ -57,7 +57,7 @@ node query(int k,int l,int r)
 void solve()
 {
     cin>>n>>m>>s;
-    for(int i=1;i<=n;i++)
+    for(int i=1;i<=n*m;i++)
         l[i].clear(),h[i]=0;
     k=0;
     for(int i=1;i<=n;i++)
@@ -72,12 +72,16 @@ void solve()
     for(int i=1;i<=m;i++)
         f[i]=(i==s?0ll:INF);
     build(1,1,m);
+    // for(int k=1;k<=n*4;k++)
+    // {
+    //     cout<<t[k].l<<"~"<<t[k].r<<":"<<t[k].L<<","<<t[k].R<<","<<t[k].D<<","<<t[k].M<<endl;
+    // }
     for(int i=1;i<=k;i++)
     {
         sort(l[i].begin(),l[i].end());
         int x=INF,y=INF;
-        if(l[i].front()-1>0)x=query(1,l[i].front()-1,m).L,cout<<i<<","<<x<<endl;
-        if(l[i].back()+1<=m)y=query(1,1,l[i].back()+1).R,cout<<i<<":"<<y<<","<<l[i].back()+1<<endl;
+        if(l[i].front()-1>0)x=query(1,l[i].front()-1,m).L;
+        if(l[i].back()+1<=m)y=query(1,1,l[i].back()+1).R;
         if(l[i].front()-1>0)f[l[i].front()-1]=x,upd(1,l[i].front()-1);
         if(l[i].back()+1<=m)f[l[i].back()+1]=y,upd(1,l[i].back()+1);
         for(int j=0;j<l[i].size();j++)
