@@ -2,7 +2,7 @@
 #define int long long
 #define endl "\n"
 using namespace std;
-const int N=105,P=1e9+7;
+const int N=305,P=1e9+7;
 int n,m,l[N],r[N],v[N],id[N];
 int fl[N],fr[N],fac[N];
 vector<int> b;
@@ -77,12 +77,12 @@ void solve()
     }
 
 
-    for(int i=1;i<=n;i++)
-        cout<<fl[i]<<" ";
-    cout<<endl;
-    for(int i=1;i<=n;i++)
-        cout<<fr[i]<<" ";
-    cout<<endl;
+    // for(int i=1;i<=n;i++)
+    //     cout<<fl[i]<<" ";
+    // cout<<endl;
+    // for(int i=1;i<=n;i++)
+    //     cout<<fr[i]<<" ";
+    // cout<<endl;
 
 
     int ans=0;
@@ -98,7 +98,7 @@ void solve()
                     if(l[j]<=x&&y<=r[j])
                         if(v[j]>v[i]||(v[i]==v[j]&&j>i))
                             cnt++;
-                cout<<"l,r:"<<l[i]<<"~"<<r[i]<<"  :"<<x<<","<<y<<":"<<fl[x]*fr[y]%P*v[i]%P*fac[cnt]<<endl;
+                // cout<<"l,r:"<<l[i]<<"~"<<r[i]<<"  :"<<x<<","<<y<<":"<<fl[x]*fr[y]%P*v[i]%P*fac[cnt]<<endl;
                 ans=(ans+fl[x]*fr[y]%P*v[i]%P*fac[cnt]%P)%P;
             }
         }
