@@ -56,7 +56,7 @@ signed main()
             ll mn=min((ll)q.second,now);
             t+=mn*q.first;
             nowcnt-=mn;
-            s[p].erase(q);
+            s[p].erase(s[p].begin());
             if(q.second-mn>0)s[p].insert({q.first,q.second-mn});
         }
         ans=max(ans,nowcnt);
