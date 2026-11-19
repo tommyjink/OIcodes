@@ -16,10 +16,20 @@ int qpow(int x,int y)
     }
     return res;
 }
+int C2(int x)
+{
+    return x*(x-1+P)%P*inv2%P;
+}
+int C3(int x)
+{
+    return (x*(x-1+P)%P*(x-2+P)%P)*inv2%P*inv3%P;
+}
 void solve()
 {
     cin>>n>>m;
-    
+    int T=(qpow(4,n-1)-qpow(3,n)+P+3*qpow(2,n-1)%P-1+P)%P;
+    int ans=1+m*(qpow(2,n-1)-1+P)%P+C2(m)*(qpow(4,n-1)-qpow(2,n)+1+P)%P%P+C3(m)*(4*T+qpow(4,n-1)%P-3*qpow(2,n-1)%P+2)%P;
+    cout<<ans*qpow(2,m)%P<<endl;
 }
 signed main()
 {
