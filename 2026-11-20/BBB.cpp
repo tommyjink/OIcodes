@@ -30,16 +30,13 @@ void build(int k,int l,int r)
     build(k*2+1,mid+1,r);
     pushup(k);
 }
-int querymn(int k,int l,int r)
-{
-    if(t[k].l>r||t[k].r<l)return INF;
-    if(l<=t[k].l&&t[k].r<=r)return t[k].mn;
-    return min(querymn(k*2,l,r),querymn(k*2+1,l,r));
-}
 node query(int k,int l,int r)
 {
     if(t[k].l>r||t[k].r<l)return {0,0,INF,0,0};
-    if(l<=t[k].l&&t[k].r<=r)return t[k].drop;
+    if(l<=t[k].l&&t[k].r<=r)return t[k];
+    int mid=(t[k].l+t[k].r)>>1;
+    if(mid<l)return query(k*2+1,l,r);
+    if(mid+1>r)return query(k*2,l,r);
     return merge(query(k*2,l,r),query(k*2+1,l,r));
 }
 
@@ -62,22 +59,22 @@ signed main()
         c[++m]=c[m]+a[i];
         c[++m]=c[m]-b[i];
     }
-    for(int i=1;i<=m;i++)
-        cout<<c[i]<<" ";
-    cout<<endl;
+    // for(int i=1;i<=m;i++)
+    //     cout<<c[i]<<" ";
+    // cout<<endl;
     m/=2;
     build(1,1,2*m);
-    while(1)
-    {
-        int l,r;
-        cin>>l>>r;
-        cout<<query(1,l,r)<<endl;
-    }
+    // while(1)
+    // {
+    //     int l,r;
+    //     cin>>l>>r;
+    //     cout<<query(1,l,r)<<endl;
+    // }
     for(int i=1;i<=m;i++)
     {
         if(i%2==0)continue;
-        if(querymn(1,i,i+m-1)-c[i-1]<0)cout<<"-1 ";
-        else cout<<query(1,i,i+m-1)<<" ";
+        if(query(1,i,i+m-1).mn-c[i-1]<0)cout<<"-1 ";
+        else cout<<query(1,i,i+m-1).drop<<" ";
     }
     return 0;
 }
