@@ -25,6 +25,24 @@ signed main()
         cin>>a[i],a[i+n]=a[i],mx+=a[i];
     for(int i=1;i<=n;i++)
         cin>>b[i],b[i+n]=b[i];
+    int tag=1;
+    for(int i=1;i<=n;i++)
+        if(a[i]!=b[i])tag=0;
+    if(tag)
+    {
+        deque<int> q;
+        for(int i=1;i<2*n;i++)
+        {
+            while(!q.empty()&&q.front()<=i-n)q.pop_front();
+            while(!q.empty()&&a[q.back()]<a[i])q.pop_back();
+            q.push_back(i);
+            if(i>=n)
+            {
+                cout<<a[q.front()]<<" ";
+            }
+        }
+        return 0;
+    }
     for(int i=1;i<=n;i++)
     {
         int l=0,r=mx;

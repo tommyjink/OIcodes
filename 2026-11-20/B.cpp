@@ -6,12 +6,12 @@ const int N=8e5+10,INF=1e18;
 int n;
 int a[N],b[N],lst[N];
 int c[N],m=0,d[N];
-int lazy[N];
+int lazy[N*4];
 struct node
 {
     int l,r;
     int mx,val,mn;
-}t[N*8];
+}t[N*4];
 void pushup(int k)
 {
     t[k].mx=max(t[k*2].mx,t[k*2+1].mx);
@@ -23,8 +23,8 @@ void pushdown(int k)
     if(~lazy[k])
     {
         lazy[k*2]=lazy[k*2+1]=lazy[k];
-        t[k*2].val=max(t[k*2].val,t[k*2].mx-lazy[k]);
-        t[k*2+1].val=max(t[k*2+1].val,t[k*2+1].mx-lazy[k]);
+        t[k*2].val=t[k*2].mx-lazy[k];
+        t[k*2+1].val=t[k*2+1].mx-lazy[k];
         lazy[k]=-1;
     }
 }
@@ -36,7 +36,7 @@ void build(int k,int l,int r)
     {
         t[k].mx=c[l];
         t[k].mn=c[l];
-        t[k].val=c[l]-d[l];
+        if(l<=m)t[k].val=c[l]-d[l];
         return;
     }
     int mid=(l+r)>>1;
@@ -50,7 +50,7 @@ void cov(int k,int l,int r,int d)
     if(l<=t[k].l&&t[k].r<=r)
     {
         lazy[k]=d;
-        t[k].val=max(t[k].val,t[k].mx-d);
+        t[k].val=t[k].mx-d;
         return;
     }
     pushdown(k);
@@ -74,8 +74,10 @@ int querymn(int k,int l,int r)
 }
 signed main()
 {
-    // ios::sync_with_stdio(false);
-    // cin.tie(nullptr);
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    // freopen("reserve4.in","r",stdin);
+    // freopen("reserve.out","w",stdout);
     cin>>n;
     for(int i=1;i<=n;i++)
         cin>>a[i];
@@ -86,8 +88,12 @@ signed main()
         c[++m]=c[m]+a[i];
         c[++m]=c[m]-b[i];
     }
-    for(int i=m+1;i<=2*m;i++)
-        c[i]=c[i-m];
+    for(int i=1;i<=n;i++)
+    {
+        c[++m]=c[m]+a[i];
+        c[++m]=c[m]-b[i];
+    }
+    m/=2;
     // for(int i=1;i<=2*m;i++)
     //     cout<<c[i]<<" ";
     // cout<<endl;
@@ -105,6 +111,7 @@ signed main()
     for(int i=m;i<=2*m-2;i++)
     {
         if(i>m)cov(1,lst[i]+1,i,c[i]);
+        // cout<<lst[i]<<"!";
         if((i-m)&1)continue;
         // cout<<querymn(1,i-m+1,i)<<"!";
         if(querymn(1,i-m+1,i)-c[i-m]<0)cout<<"-1"<<" ";
