@@ -4,20 +4,16 @@
 using namespace std;
 const int N=2e5+10;
 const int P=998244353;
-int n,m,q,T,dep[N];
+int n,ma,mb,q,v,T,dep[N];
 int tot,head[N],f[N];
 int a[N],b[N],suma[N],sumb[N];
 int ga[N],gb[N],l[N],inv2=0;
-int cnt=0,c[N],l1[N],l2[N];
+int cnt=0,c[N],l1[N],l2[N],d[N];
 int X,Y,B=0;
 struct node
 {
     int to,next;
 }e[N*2];
-struct xyz
-{
-    int x,y,z;
-}r[N];
 int qpow(int x,int y)
 {
     int res=1;
@@ -108,44 +104,56 @@ void prep()
 }
 void solve()
 {
-    inv2=qpow(2,P-2);
-    cin>>n>>m>>q>>T;
-    for(int i=1;i<=n-1;i++)
+    cin>>n;
+    for(int i=1;i<=n;i++)
+        head[i]=f[i]=dep[i]=a[i]=b[i]=suma[i]=sumb[i]=ga[i]=gb[i]=l[i]=c[i]=l1[i]=l2[i]=d[i]=0;
+    tot=0;
+    for(int i=1;i<n;i++)
     {
         int x,y;
         cin>>x>>y;
         add(x,y);
         add(y,x);
     }
-    for(int i=1;i<=m;i++)
+    cin>>ma;
+    for(int i=1;i<=ma;i++)
     {
-        cin>>r[i].x>>r[i].y>>r[i].z;
-        if(r[i].x==1) a[r[i].y]+=r[i].z;
-        else b[r[i].y]+=r[i].z;
+        int x,y;
+        cin>>x>>y;
+        a[y]+=x;
     }
-    while(q--)
+    cin>>mb;
+    for(int i=1;i<=mb;i++)
     {
-        int k;cin>>k;
-        for(int i=1;i<=k;i++)
-        {
-            int x,c,p,w;
-            cin>>x>>c>>p>>w;
-            if(r[x].x==1)a[r[x].y]-=r[x].z;
-            else b[r[x].y]-=r[x].z;
-            r[x]={c,p,w};
-            if(r[x].x==1)a[r[x].y]+=r[x].z;
-            else b[r[x].y]+=r[x].z;
-        }
-        prep();
-        int ans=B%P*T%P;
-        for(int i=1;i<=cnt;i++)
-        {
-            int L=min(T,c[i]);
-            int sum1=L*(L+1)%P*inv2%P;
-            int sum2=(T-L)%P*(c[i]%P)%P;
-            ans=(ans+sum1+sum2)%P;
-        }
-        cout<<ans<<endl;
+        int x,y;
+        cin>>x>>y;
+        b[y]+=x;
+    }
+    cin>>v>>T;
+    prep();
+    // cout<<cnt<<":"<<endl;
+    // for(int i=1;i<=cnt;i++)
+    //     cout<<c[i]<<" ";
+    // cout<<endl;
+    // for(int i=1;i<=cnt+1;i++)
+    //     cout<<l[i]<<" ";
+    // cout<<endl;
+    int k1=cnt,k2=cnt;
+    for(int i=1;i<=cnt;i++)
+        d[i]=c[cnt-i+1];
+    for(int i=1;i<cnt;i++)
+    {
+        if(c[i]>c[i+1])k1=min(k1,i);
+        if(d[i]>d[i+1])k2=min(k2,i);
+    }
+    // cout<<k1<<"!"<<k2<<endl;
+    for(int i=1;i<=T;i++)
+    {
+        int p1=upper_bound(c+1,c+1+k1,i*v)-c-1;
+        int p2=upper_bound(d+1,d+1+k2,i*v)-d-1;
+        // cout<<p1<<","<<p2<<endl;
+        if(p1+p2>cnt)cout<<0<<endl;
+        else cout<<cnt-(p1+p2)<<endl;
     }
 }
 signed main()
