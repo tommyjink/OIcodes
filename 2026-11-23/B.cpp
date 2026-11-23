@@ -3,10 +3,10 @@
 #define endl "\n"
 using namespace std;
 const int N=2e5+10,P=998244353;
-int n,deg[N],col[N],fac[N],inv[N];
-int head[N],tot=1,cnt=0,d[N];
-int siz[N],vis[N];
-vector<int> V[N]; 
+int n,deg[N],col[N];
+int head[N],tot=1,cnt=0,d[N],f[N];
+int siz[N],vis[N],ans=1,dep[N],res=0;
+vector<int> V[N],bk;
 struct node
 {
     int to,next,from,ban;
@@ -27,11 +27,6 @@ int qpow(int x,int y)
     }
     return res;
 }
-int C(int x,int y)
-{
-    if(x<y||y<0)return 0;
-    return fac[x]*inv[y]%P*inv[x-y]%P;
-}
 void dfs(int x,int now)
 {
     // cout<<x<<"?"<<endl;
@@ -44,32 +39,54 @@ void dfs(int x,int now)
         dfs(v,now);
     }
 }
-int dfs1(int x)
+void dfs1(int x)
 {
     vis[x]=true;
     for(int i=head[x];i;i=e[i].next)
     {
         int v=e[i].to;
         if(e[i].ban)continue;
-        if(vis[v])return i;
-        ban[i^1]=true;
-        int res=dfs1(v);
-        if(res)return res;
+        if(vis[v]){bk.push_back(i);continue;}
+        e[i^1].ban=true;
+        dep[v]=dep[x]+1;
+        f[v]=x;
+        dfs1(v);
     }
-    return 0;
 }   
+void dfs2(int x,int fa)
+{
+    siz[x]=1;
+    // cout<<x<<":"<<endl;
+    for(int i=head[x];i;i=e[i].next)
+    {
+        int v=e[i].to;
+        // cout<<v<<" "<<i<<" "<<bk[0]<<" "<<fa<<endl;
+        if(v==fa||bk[0]==i||(bk[0]^1)==i)continue;
+        dfs2(v,x);
+        siz[x]+=siz[v];
+    }
+    // cout<<x<<"!"<<siz[x]<<endl;
+    res=(res+siz[x]-1+P)%P;
+}
+int lca(int x,int y)
+{
+    if(dep[x]<dep[y])swap(x,y);
+    while(dep[x]>dep[y])x=f[x];
+    if(x==y)return x;
+    while(x!=y)x=f[x],y=f[y];
+    return x;
+}
+int dis(int x,int y)
+{
+    int o=lca(x,y);
+    return dep[x]+dep[y]-2*dep[o];
+}
 signed main()
 {
-    // ios::sync_with_stdio(false);
-    // cin.tie(nullptr);
-    // freopen("B.in","r",stdin);
-    // freopen("B.out","w",stdout);
-    fac[0]=inv[0]=1;
-    for(int i=1;i<N;i++)
-        fac[i]=fac[i-1]*i%P;
-    inv[N-1]=qpow(fac[N-1],P-2);
-    for(int i=N-2;i>=1;i--)
-        inv[i]=inv[i+1]*(i+1)%P;
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    freopen("B.in","r",stdin);
+    freopen("B.out","w",stdout);
     cin>>n;
     for(int i=1;i<=n;i++)
     {
@@ -82,7 +99,7 @@ signed main()
     // for(int i=1;i<=n;i++)
     // cout<<deg[i]<<" ";
     // cout<<endl;
-    int ans=0,c0=0,c1=0,c2=0;
+    int c0=0,c1=0,c2=0;
     for(int i=1;i<=n;i++)
     {
         if(col[i])continue;
@@ -96,16 +113,20 @@ signed main()
         if(num==m+1)c2++;
     }
     // cout<<c0<<" "<<c1<<" "<<c2<<endl;
+    int fac=qpow(2,cnt-1);
     if(c0==cnt)
     {
         ans=0;
         for(int i=1;i<=cnt;i++)
         {
-            int m=V[i].size();
-            d[i]=0;
-            for(int x:V[i])
-                if(deg[x]>=2)d[i]=(d[i]+C(deg[x],2)*(n-1)%P)%P;
-            ans=(ans+d[i]*qpow(2,cnt-1)%P)%P;
+            bk.clear();
+            dfs1(V[i][0]);
+            int x=e[bk[0]].from,y=e[bk[0]].to;
+            // cout<<x<<","<<y<<endl;
+            res=0;
+            dfs2(x,0);
+            dfs2(y,0);
+            ans=(ans+fac*res%P)%P;
         }
         // cout<<"!"<<endl;
     }
@@ -121,9 +142,13 @@ signed main()
             else if(num+1==m)ans=ans*m%P;
             else if(num==m+1)
             {
-                int res=0;
-                for(int x:V[i])
-                    if(deg[x]>=2)res=(res+C(deg[x],2)*((deg[x]==2)+1)%P)%P;
+                bk.clear();
+                dep[V[i][0]]=0;
+                f[V[i][0]]=0;
+                dfs1(V[i][0]);
+                int x=e[bk[0]].from,y=e[bk[0]].to;
+                int xx=e[bk[1]].from,yy=e[bk[1]].to;
+                int res=(dis(x,xx)+1+dis(y,xx)+1+dis(x,yy)+1+dis(y,yy)+1)%P;
                 ans=ans*res%P;
             }
         }

@@ -10,8 +10,8 @@ signed main()
 {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
-    freopen("B.in","w",stdout);
-    int n=3;
+    // freopen("B.in","w",stdout);
+    int n=20;
     cout<<n<<endl;
     for(int i=1;i<=n;i++)
     {
