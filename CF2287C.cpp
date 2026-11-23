@@ -1,11 +1,11 @@
 #include<bits/stdc++.h>
 #define endl "\n"
 using namespace std;
-const int N=1e5+10,M=1e4+10;
+const int N=5e4+10;
 int n[N],m[N],ans[N],mx=0,num[N],tot=0;
 int prime[N],cnt=0,vis[N],fac[N];
 vector<int> q[N];
-bitset<N> f,s[M],pre; 
+bitset<N> f,s[N],pre; 
 void init()
 {
     for(int i=2;i<N;i++)
