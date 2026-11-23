@@ -9,8 +9,8 @@ signed main()
 {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
-    freopen("B.in","r",stdin);
-    freopen("BB.out","w",stdout);
+    // freopen("B.in","r",stdin);
+    // freopen("BB.out","w",stdout);
     cin>>n;
     for(int i=1;i<=n;i++)
         cin>>a[i]>>b[i];

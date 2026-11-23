@@ -4,15 +4,16 @@
 using namespace std;
 const int N=2e5+10,P=998244353;
 int n,deg[N],col[N],fac[N],inv[N];
-int head[N],tot,cnt=0;
+int head[N],tot=1,cnt=0,d[N];
+int siz[N],vis[N];
 vector<int> V[N]; 
 struct node
 {
-    int to,next;
+    int to,next,from,ban;
 }e[N*2];
 void add(int x,int y)
 {
-    e[++tot]=(node){y,head[x]};
+    e[++tot]=(node){y,head[x],x};
     head[x]=tot;
 }
 int qpow(int x,int y)
@@ -33,7 +34,7 @@ int C(int x,int y)
 }
 void dfs(int x,int now)
 {
-    // cout<<x<<endl;
+    // cout<<x<<"?"<<endl;
     col[x]=now;
     V[now].push_back(x);
     for(int i=head[x];i;i=e[i].next)
@@ -43,6 +44,20 @@ void dfs(int x,int now)
         dfs(v,now);
     }
 }
+int dfs1(int x)
+{
+    vis[x]=true;
+    for(int i=head[x];i;i=e[i].next)
+    {
+        int v=e[i].to;
+        if(e[i].ban)continue;
+        if(vis[v])return i;
+        ban[i^1]=true;
+        int res=dfs1(v);
+        if(res)return res;
+    }
+    return 0;
+}   
 signed main()
 {
     // ios::sync_with_stdio(false);
@@ -64,32 +79,56 @@ signed main()
         add(y,x);
         deg[x]++,deg[y]++;
     }
-    int ans=1,c0=0,c1=0,c2=0;
+    // for(int i=1;i<=n;i++)
+    // cout<<deg[i]<<" ";
+    // cout<<endl;
+    int ans=0,c0=0,c1=0,c2=0;
     for(int i=1;i<=n;i++)
     {
         if(col[i])continue;
         dfs(i,++cnt);
         int m=V[cnt].size(),num=0;
-        for(int x:V[i])num+=deg[x];
+        for(int x:V[cnt])num+=deg[x];
         num/=2;
-        if(num==m)
+        // cout<<num<<" "<<m<<endl;
+        if(num==m)c0++;
+        if(num+1==m)c1++;
+        if(num==m+1)c2++;
     }
-    for(int i=1;i<=cnt;i++)
+    // cout<<c0<<" "<<c1<<" "<<c2<<endl;
+    if(c0==cnt)
     {
-        int m=V[i].size(),num=0;
-        for(int x:V[i])num+=deg[x];
-        num/=2;
-        if(num==m)ans=ans*2%P;
-        else if(num+1==m)ans=ans*m%P;
-        else if(num==m+1)
+        ans=0;
+        for(int i=1;i<=cnt;i++)
         {
-            int res=0;
+            int m=V[i].size();
+            d[i]=0;
             for(int x:V[i])
-                if(deg[x]>=2)res=(res+C(deg[x],2)*((deg[x]==2)+1)%P)%P;
-            ans=ans*res%P;
+                if(deg[x]>=2)d[i]=(d[i]+C(deg[x],2)*(n-1)%P)%P;
+            ans=(ans+d[i]*qpow(2,cnt-1)%P)%P;
         }
-        else ans=0;
+        // cout<<"!"<<endl;
     }
+    else if(c0==cnt-2&&c1==1&&c2==1)
+    {
+        ans=1;
+        for(int i=1;i<=cnt;i++)
+        {
+            int m=V[i].size(),num=0;
+            for(int x:V[i])num+=deg[x];
+            num/=2;
+            if(num==m)ans=ans*2%P;
+            else if(num+1==m)ans=ans*m%P;
+            else if(num==m+1)
+            {
+                int res=0;
+                for(int x:V[i])
+                    if(deg[x]>=2)res=(res+C(deg[x],2)*((deg[x]==2)+1)%P)%P;
+                ans=ans*res%P;
+            }
+        }
+    }
+    else ans=0;
     cout<<ans<<endl;
     return 0;
 }
