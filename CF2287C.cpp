@@ -2,16 +2,14 @@
 #define int long long
 #define endl "\n"
 using namespace std;
-int isprime(int x)
-{   
-    for(int i=2;i*i<=x;i++)
-        if(x%i==0)return i;
-    return 1;
-}
+const int N=1e5+10;
+int n[N],m[N];
 signed main()
 {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
-    cout<<isprime(30001)<<endl;
+    int t;cin>>t;
+    for(int i=1;i<=t;i++)
+        cin>>n[i]>>m[i];
     return 0;
 }
