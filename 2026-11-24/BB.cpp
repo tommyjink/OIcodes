@@ -2,7 +2,7 @@
 #define int long long
 #define endl "\n"
 using namespace std;
-const int N=2505,INF=1e16;
+const int N=2505,INF=1e9;
 int n,dp[N][N][2];
 int tot,depy[N],depx[N];
 string s,z;
@@ -37,7 +37,7 @@ void dfs(int x,int fa,int rt)
 void solve()
 {
     cin>>n>>s>>z;
-    for(int i=0;i<=n;i++)
+    for(int i=0;i<=n+1;i++)
         g[i].clear(),f[i].clear(),V[i].clear();
     s=" "+s;
     z=" "+z;
