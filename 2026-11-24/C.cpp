@@ -17,22 +17,24 @@ void solve()
     {
         cin >> a[i] >> b[i];
         if (a[i] < b[i])
-            g[a[i]].push_back(n - b[i] + 1);
+            g[a[i]].push_back(n - b[i] + 1), base++;
         else
-            f[b[i]].push_back(n - a[i] + 1), base++;
+            f[b[i]].push_back(n - a[i] + 1);
     }
     for (int x = 1; x <= n - 1; x++)
     {
         for (int y : g[x])
-            s.insert(y), base++;
+            s.insert(y);
+        for (int y : f[x])
+            base++;
         for (int y : f[x])
         {
             auto p = s.lower_bound(y);
             if (p != s.end())
                 s.erase(p), base--;
         }
-        while (!s.empty() && *prev(s.end()) > x)
-            s.erase(prev(s.end()));
+        while (!s.empty() && *prev(s.end()) > n - x)
+            s.erase(prev(s.end())), base--;
         cout << base << " ";
     }
     cout << endl;
