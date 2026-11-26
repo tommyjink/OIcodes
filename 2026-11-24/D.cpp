@@ -26,7 +26,7 @@ int C(int x,int y)
 }
 void dfs(int x)
 {
-    cout<<x<<endl;
+    // cout<<x<<endl;
     if(x<=n)siz[x]=1;
     else siz[x]=0;
     int sav=0,ok=0;
@@ -39,7 +39,7 @@ void dfs(int x)
         if(!P||tmp)sav=siz[v]*w[x];
         siz[x]+=siz[v];
     }
-    ans1+=ok*sav;
+    ans1+=2*ok*sav;
     if(siz[x]*2>n&&!P)
     {
         P=x,c=n-siz[x];
@@ -47,11 +47,12 @@ void dfs(int x)
         ans1+=(n-2*c-1)*w[P];
         for(int q=0;;q++)
         {
-            int x=q+c+1-b,y=q+c+1-a,z=a+b-c-1;
-            if(min({x,y,z})<0)continue;
+            int x=q+c+1-b,y=q+c+1-a,z=a+b-c-1-2*q;
+            if(z<0)break;
+            if(x<0||y<0)continue;
             ans2=(ans2+fac[c+1]*inv[x]%mod*inv[y]%mod*inv[z]%mod*C(c+q,q)%mod*pw[z]%mod)%mod;
         }
-        ans2=ans2*fac[c]%mod;
+        ans2=ans2*fac[c]%mod*fac[a]%mod*fac[b]%mod;
         return;
     }
 }
@@ -59,10 +60,15 @@ void solve()
 {
     cin>>n;
     for(int i=1;i<=2*n;i++)
-        fa[i]=i;
+        fa[i]=i,g[i].clear();
     tot=n;
     for(int i=1;i<=n-1;i++)
         cin>>e[i].x>>e[i].y>>e[i].z;
+    if(n==1)
+    {
+        cout<<"0 1"<<endl;
+        return;
+    }
     sort(e+1,e+n,cmp);
     for(int i=1;i<=n-1;i++)
     {
