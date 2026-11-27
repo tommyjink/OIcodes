@@ -3,7 +3,7 @@
 #define endl "\n"
 #define pii pair<int,int>
 using namespace std;
-const int N=2005;
+const int N=4005;
 int n,m,b[N][N],p1[N],p2[N];
 int l1[N],l2[N],r1[N],r2[N];
 pii c[2*N];
