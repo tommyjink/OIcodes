@@ -5,7 +5,7 @@
 #define ppt pii
 using namespace std;
 using ppt=pair<int,int>;
-const int N=4e5+10,M=1e10+1;
+const int N=4e5+10,M=1e10;
 int n;
 pii a[N];
 pii cov(pii a,pii b)
@@ -18,32 +18,24 @@ void print(pii x)
 }
 bool check1(int mid)
 {
-    // cout<<mid<<":"<<endl;
-    pii now=a[1],x,y;
+    int p=a[1].first;
     for(int i=2;i<=n;i++)
     {
-        
-        x=cov({now.first+mid,M},a[i]);
-        y=cov({-M,now.second-mid},a[i]);
-        // print(x),print(y);
-        if(x.first<=x.second)now=x;
-        if(y.first<=y.second)now=y;
-        if(x.first>x.second&&y.first>y.second)
+        if(p+mid>a[i].second)return false;
+        p=max(a[i].first,p+mid);
     }
     return true;
 }
 bool check2(int mid)
 {
-    // cout<<mid<<":"<<endl;
-    pii now=a[1];
+    int p=a[1].second;
     for(int i=2;i<=n;i++)
     {
-        pii x={now.first-mid,now.second+mid};
-        now=cov(x,a[i]);
-        if(now.second<now.first)return false;
+        if(p+mid<a[i].first)return false;
+        p=min(a[i].second,p+mid);
     }
     return true;
-} 
+}
 signed main()
 {
     ios::sync_with_stdio(false);
@@ -51,7 +43,7 @@ signed main()
     cin>>n;
     for(int i=1;i<=n;i++)
         cin>>a[i].first>>a[i].second;
-    // check1(5);
+    // cout<<check1(123)<<endl;
     // return 0;
     int l=0,r=M;
     while(l<r)
@@ -61,7 +53,7 @@ signed main()
         else r=mid-1;
     }
     int R=l;
-    l=0,r=M;
+    l=1,r=M;
     while(l<r)
     {
         int mid=(l+r)>>1;
